@@ -21,9 +21,25 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
 	
+	private static ParkingGarage garage;
+
+	
 	//private HashMap<String, Ticket> virtualTicketMap = new HashMap<String, Ticket>();
 	//private HashMap<Integer, Ticket> physicalTicketMap = new HashMap<Integer, Ticket>();
+	
+	public static void main(String[] args) {
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+	    
+				garage = new ParkingGarage();
+				garage.setOpen(true);
+				
+			}
+		});
 
+	}
+	
 	public ParkingGarage() {
 		super();
 		
