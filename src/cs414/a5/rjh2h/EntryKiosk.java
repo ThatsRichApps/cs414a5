@@ -13,18 +13,29 @@ import cs414.a5.rjh2h.ui.PhysicalTicketUI;
 
 public class EntryKiosk extends Observable implements Observer, ActionListener {
 
+	// EntryKiosk is a client implementation that connects to the ParkingGarageServer
+	
 	private static final int TICKET_LEVEL_WARNING = 10;
 	private EntryKioskUI entryUI;
-	private ParkingGarage garage;
 	private boolean isGarageOpen;
 	private Gate entryGate;
 	private Ticket currentTicket;
 	private int ticketNumber = 0; 
 	private int ticketLevel = 1000;
 	
-	public EntryKiosk() {
+	private ParkingGarage garage;
 	
+	/*
+	public static void main(String[] args) {
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				
+			}
+		});
+
 	}
+	*/
 	
 	public EntryKiosk(ParkingGarage garage) {
 	
@@ -54,6 +65,12 @@ public class EntryKiosk extends Observable implements Observer, ActionListener {
 		// Entry observes the ParkingGarage.  If garage is closed, entry is not allowed.
 		
 		//System.out.println("Update called:" + o + ":" + arg);
+		
+		// should get the state from the garage here
+		
+		
+		
+		
 		
 		String statusMessage = (String) arg;
 		

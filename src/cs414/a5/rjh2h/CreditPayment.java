@@ -4,15 +4,17 @@ import java.math.BigDecimal;
 
 public class CreditPayment extends Payment {
 	
-	private CreditCard creditCard;
+	private String cardNumber;
+	private int expMonth;
+	private int expYear;
+	private BigDecimal totalCharged;
 	
 	public CreditPayment(){
 	}
 	
 	public CreditPayment(BigDecimal amountDue, String cardNumber) {
 		super(amountDue);
-		creditCard = new CreditCard();
-		creditCard.setCardNumber(cardNumber);
+		this.cardNumber = cardNumber;
 	}
 	
 	@Override
@@ -24,20 +26,15 @@ public class CreditPayment extends Payment {
 	public boolean initiatePayment() {
 		
 		// charge card here
-		if (creditCard.getCardNumber() == "1111 1111 1111 1111") {
-			// use 1111 1111 1111 1111 card to test decline
+		if (this.cardNumber == "0000 0000 0000 0000") {
+			// use 0000 0000 0000 0000 card to test decline
 			return (false);
 		}
 		
 		return true;
 	}
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
 
-	public void setCreditCard(CreditCard creditCard) {
-		this.creditCard = creditCard;
-	}
-
+	
+	
 }

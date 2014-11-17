@@ -7,7 +7,6 @@ public class CreditCard {
 	private String cardNumber;
 	private int expMonth;
 	private int expYear;
-	private int cvv;
 	private BigDecimal totalCharged;
 
 	// if called with no fields, just initate with bogus data
@@ -16,7 +15,6 @@ public class CreditCard {
 		this.totalCharged = new BigDecimal(0);
 		this.expMonth = 10;
 		this.expYear = 2015;
-		this.cvv = 888;
 	}
 	
 	public CreditCard(String cardNumber, int expMonth, int expYear, int cvv) {
@@ -29,7 +27,6 @@ public class CreditCard {
 		
 		this.expMonth = expMonth;
 		this.expYear = expYear;
-		this.cvv = cvv;
 		this.totalCharged = new BigDecimal(0);
 	}
 	
@@ -50,10 +47,6 @@ public class CreditCard {
 		return expYear;
 	}
 
-	public int getCvv() {
-		return cvv;
-	}
-
 	public BigDecimal getTotalCharged() {
 		return totalCharged;
 	}
@@ -70,10 +63,6 @@ public class CreditCard {
 		this.expYear = expYear;
 	}
 
-	public void setCvv(int cvv) {
-		this.cvv = cvv;
-	}
-
 	public void setTotalCharged(BigDecimal totalCharged) {
 		this.totalCharged = totalCharged;
 	}
@@ -88,7 +77,7 @@ public class CreditCard {
 		// verification system and charges the card
 		
 		// set bogus card number for false tests
-		if (this.cardNumber == "1111 1111 1111 1111") {
+		if (this.cardNumber == "0000 0000 0000 0000") {
 			return (false);
 		}
 		
