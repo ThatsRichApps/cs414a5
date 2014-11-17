@@ -76,8 +76,8 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 	public void setOpen(boolean isOpen) {
 		this.isOpen = isOpen;
 		setChanged();
-		notifyObservers(this);
-		//notifyObservers("GarageOpen");
+		//notifyObservers(this);
+		notifyObservers("GarageOpen");
 	}
 
 	

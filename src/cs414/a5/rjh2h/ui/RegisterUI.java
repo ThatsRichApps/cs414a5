@@ -65,7 +65,7 @@ public class RegisterUI extends JFrame {
         
         paidButton = new JButton("Paid");
         paidButton.setActionCommand("Paid");
-        openGateButton = new JButton("No Charge");
+        openGateButton = new JButton("Can Not Pay");
         openGateButton.setActionCommand("OpenGate");
         
         JPanel pane = new JPanel(new GridLayout(6, 2));
