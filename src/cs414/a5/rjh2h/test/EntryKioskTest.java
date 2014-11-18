@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.EntryKiosk;
-import cs414.a5.rjh2h.ParkingGarage;
+import cs414.a5.rjh2h.entry.EntryKiosk;
+import cs414.a5.rjh2h.server.GarageImpl;
 
 public class EntryKioskTest extends EntryKiosk {
 
@@ -23,7 +23,7 @@ public class EntryKioskTest extends EntryKiosk {
 	@Test
 	public void testEntryKiosk1() {
 	
-		ParkingGarage garageTest = new ParkingGarage();
+		GarageImpl garageTest = new GarageImpl();
 		
 		EntryKiosk entryKiosk = new EntryKiosk(garageTest);
 		

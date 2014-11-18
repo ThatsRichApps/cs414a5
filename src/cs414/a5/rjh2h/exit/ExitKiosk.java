@@ -1,10 +1,15 @@
-package cs414.a5.rjh2h;
+package cs414.a5.rjh2h.exit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import cs414.a5.rjh2h.Gate;
+import cs414.a5.rjh2h.Register;
+import cs414.a5.rjh2h.Ticket;
+import cs414.a5.rjh2h.Transaction;
+import cs414.a5.rjh2h.server.GarageImpl;
 import cs414.a5.rjh2h.ui.ExitKioskUI;
 
 public class ExitKiosk extends Observable implements Observer,ActionListener {
@@ -12,7 +17,7 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 	// Parking Garage observes ExitKiosk to know when cars leave
 	
 	private ExitKioskUI exitUI;
-	private ParkingGarage garage;
+	private GarageImpl garage;
 	private Register register;
 	private Gate exitGate;
 	private Ticket currentTicket;
@@ -22,7 +27,7 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 		
 	}
 	
-	public ExitKiosk(ParkingGarage garage) {
+	public ExitKiosk(GarageImpl garage) {
 		// set the garage as the observer to track car exit
 		this.garage = garage;
 		this.addObserver(garage);

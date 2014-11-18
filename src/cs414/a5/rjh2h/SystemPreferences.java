@@ -5,29 +5,30 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
+//import java.util.Observable;
 
+import cs414.a5.rjh2h.server.GarageImpl;
 import cs414.a5.rjh2h.ui.SysAdminUI;
 
-public class SystemPreferences extends Observable implements ActionListener {
+public class SystemPreferences implements ActionListener {
 
 	private SysAdminUI sysAdminUI;
 	
 	private Map<String, String> systemPrefs = new HashMap<String, String>();
 	private HashMap<String, SystemAccount> systemAccountList;
 	@SuppressWarnings("unused")
-	private ParkingGarage garage;
+	private GarageImpl garage;
 	
 	public SystemPreferences(){
 	}
 	
-	public SystemPreferences(ParkingGarage garage) {
+	public SystemPreferences(GarageImpl garage) {
 		
 		// set the garage as an observer so that
 		// when preferences change (max occupancy)
 		// the garage updates accordingly
 		this.garage = garage;
-		this.addObserver(garage);
+		//this.addObserver(garage);
 				
 		systemPrefs.put("rate", "2.00");
 		systemPrefs.put("maximum occupancy", "10");
@@ -104,8 +105,8 @@ public class SystemPreferences extends Observable implements ActionListener {
 				
 				systemPrefs.put(preference, valueField);
 				
-				setChanged();
-				notifyObservers();
+				//setChanged();
+				//notifyObservers();
 				
 				break;
 		

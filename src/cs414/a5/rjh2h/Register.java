@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
+import cs414.a5.rjh2h.exit.ExitKiosk;
 import cs414.a5.rjh2h.ui.RegisterUI;
 
 public class Register implements ActionListener {

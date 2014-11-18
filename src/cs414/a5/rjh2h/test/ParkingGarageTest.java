@@ -6,15 +6,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.ParkingGarage;
+import cs414.a5.rjh2h.server.GarageImpl;
 
-public class ParkingGarageTest extends ParkingGarage {
+public class ParkingGarageTest extends GarageImpl {
 
-	private ParkingGarage garageTest;
+	private GarageImpl garageTest;
 	
 	@Before
 	public void setUp() throws Exception {
-		garageTest = new ParkingGarage();
+		garageTest = new GarageImpl();
 	}
 
 	@After

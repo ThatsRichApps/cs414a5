@@ -1,18 +1,22 @@
-package cs414.a5.rjh2h;
+package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
-import cs414.a5.rjh2h.ui.GarageUI;
+import cs414.a5.rjh2h.*;
+import cs414.a5.rjh2h.common.*;
+import cs414.a5.rjh2h.ui.*;
 
-public class ParkingGarage extends Observable implements Observer, ActionListener {
+public class GarageImpl extends UnicastRemoteObject implements Garage, ActionListener {
 	
 	// Parking Garage occupancy is observable.  Also, the garage observes the entryKiosk
 	// in order to know when cars are entering
 	
+	private static final long serialVersionUID = 1L;
 	private boolean isOpen;
 	private int currentOccupancy;
 	private GarageUI garageUI;
@@ -21,26 +25,9 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
 	
-	private static ParkingGarage garage;
-
+	//private static GarageImpl garage;
 	
-	//private HashMap<String, Ticket> virtualTicketMap = new HashMap<String, Ticket>();
-	//private HashMap<Integer, Ticket> physicalTicketMap = new HashMap<Integer, Ticket>();
-	
-	public static void main(String[] args) {
-		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-	    
-				garage = new ParkingGarage();
-				garage.setOpen(true);
-				
-			}
-		});
-
-	}
-	
-	public ParkingGarage() {
+	public GarageImpl() throws java.rmi.RemoteException {
 		super();
 		
 		// create the main gui here
@@ -52,15 +39,15 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 		garageUI.addShowUsageActionListener(this);
 		
 		Sign entrySign = new Sign();
-		this.addObserver(entrySign);
+		//this.addObserver(entrySign);
 		
-		EntryKiosk entryKiosk = new EntryKiosk(this);
-		this.addObserver(entryKiosk);
+		//EntryKiosk entryKiosk = new EntryKiosk(this);
+		//this.addObserver(entryKiosk);
 		
-		@SuppressWarnings("unused")
-		ExitKiosk exitKiosk = new ExitKiosk(this);
+		//@SuppressWarnings("unused")
+		//ExitKiosk exitKiosk = new ExitKiosk(this);
 		
-		currentOccupancy = 0;
+		this.currentOccupancy = 0;
 		
 	}
 	
@@ -75,9 +62,9 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 
 	public void setOpen(boolean isOpen) {
 		this.isOpen = isOpen;
-		setChanged();
+		//setChanged();
 		//notifyObservers(this);
-		notifyObservers("GarageOpen");
+		//notifyObservers("GarageOpen");
 	}
 
 	
@@ -118,15 +105,15 @@ public class ParkingGarage extends Observable implements Observer, ActionListene
 		// notifying the sign and the entryKiosk
 		if (currentOccupancy >= systemPreferences.getMaxOccupancy()) {
 			this.isOpen = false;		
-			this.setChanged();
+			//this.setChanged();
 			
 			// don't send the state, send the subject, need to rework
 			
-			this.notifyObservers("GarageFull");
+			//this.notifyObservers("GarageFull");
 		} else if (this.isOpen == false) {
 			this.isOpen = true;		
-			this.setChanged();
-			this.notifyObservers("GarageOpen");
+			//this.setChanged();
+			//this.notifyObservers("GarageOpen");
 		}
 		
 	}
