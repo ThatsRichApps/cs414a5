@@ -2,16 +2,17 @@ package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Iterator;
 
 import cs414.a5.rjh2h.*;
 import cs414.a5.rjh2h.common.*;
 import cs414.a5.rjh2h.ui.*;
 
-public class GarageImpl extends UnicastRemoteObject implements Garage, ActionListener {
+public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSubject, ActionListener {
 	
 	// Parking Garage occupancy is observable.  Also, the garage observes the entryKiosk
 	// in order to know when cars are entering
@@ -24,6 +25,8 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, ActionLis
 	@SuppressWarnings("unused")
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
+	
+	private ArrayList<RemoteObserver> observers = new ArrayList<RemoteObserver>();
 	
 	//private static GarageImpl garage;
 	
@@ -38,11 +41,12 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, ActionLis
 		garageUI.addSysAdminActionListener(this);
 		garageUI.addShowUsageActionListener(this);
 		
+		@SuppressWarnings("unused")
 		Sign entrySign = new Sign();
-		//this.addObserver(entrySign);
+		//addObserver(entrySign);
 		
 		//EntryKiosk entryKiosk = new EntryKiosk(this);
-		//this.addObserver(entryKiosk);
+		//addObserver(entryKiosk);
 		
 		//@SuppressWarnings("unused")
 		//ExitKiosk exitKiosk = new ExitKiosk(this);
@@ -50,6 +54,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, ActionLis
 		this.currentOccupancy = 0;
 		
 	}
+	
 	
 	@Override
 	public String toString() {
@@ -83,40 +88,35 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, ActionLis
 	public void setSystemPreferences(SystemPreferences systemPreferences) {
 		this.systemPreferences = systemPreferences;
 	}
-
-	public void update(Observable o, Object arg) {
-	    // update garage.occupancy and the garage.isOpen status as needed 
-		// the garage observes both the entry and exit in order to 
-		// keep occupancy correct
-		if ((String)arg == "entry") {
+	
+	public void updateOccupancy(String entryOrExit) {
+		// successful entry or exit, update occupancy and observers
+		if (entryOrExit == "entry") {
 			currentOccupancy++;
-		} else if ((String)arg == "exit") {
+		} else if (entryOrExit == "exit") {
 			currentOccupancy--;
 			if (currentOccupancy < 0 ) {currentOccupancy = 0;};
 		}
 		
-		// update the occupancy of the garage ui view
 		garageUI.setMessage("Current Occupancy:" + currentOccupancy);
 
 		Date timeNow = new Date();
 		dataStorage.updateOccupancyData(timeNow, currentOccupancy);
-		
+				
 		// If the garage reaches max occupancy, close it down by 
 		// notifying the sign and the entryKiosk
 		if (currentOccupancy >= systemPreferences.getMaxOccupancy()) {
 			this.isOpen = false;		
-			//this.setChanged();
-			
-			// don't send the state, send the subject, need to rework
-			
-			//this.notifyObservers("GarageFull");
+			notifyObservers();
 		} else if (this.isOpen == false) {
 			this.isOpen = true;		
-			//this.setChanged();
-			//this.notifyObservers("GarageOpen");
+			notifyObservers();
 		}
-		
+			
 	}
+	
+	
+	
 	
 	public void actionPerformed(ActionEvent event) {
 		
@@ -164,6 +164,46 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, ActionLis
 		dataStorage.saveTransaction(transaction);
 	
 	}
+
+	@Override
+	public void addObserver(RemoteObserver o) throws RemoteException {
+		observers.add(o);
+	}
+
+
+	@Override
+	public void remoteObserver(RemoteObserver o) throws RemoteException {
+		observers.remove(o);
+	}
+	
+	private void notifyObservers() {
+		Iterator<RemoteObserver> i = observers.iterator();
+		while ( i.hasNext() ) {
+			RemoteObserver o = (RemoteObserver) i.next();
+			try {
+				o.update( this );
+			} catch (RemoteException re) {
+				// do something
+			}
+		}	
+	}
+	
+	public String getStatus() throws RemoteException {
+		if (isOpen) {
+			return ("GarageOpen");
+		} else {
+			return ("GarageFull");
+		}
+	}
+
+	@Override
+	public void addTicket(Ticket currentTicket) throws RemoteException {
+		// merge these to one...
+		dataStorage.addPhysicalTicket(currentTicket);
+		dataStorage.addVirtualTicket(currentTicket);
+	}
+	
+	
 	
 	
 	

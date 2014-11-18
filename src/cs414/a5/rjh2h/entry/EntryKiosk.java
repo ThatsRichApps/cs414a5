@@ -2,6 +2,7 @@ package cs414.a5.rjh2h.entry;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -9,20 +10,19 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 
 import cs414.a5.rjh2h.Gate;
 import cs414.a5.rjh2h.Ticket;
 import cs414.a5.rjh2h.common.Garage;
-import cs414.a5.rjh2h.server.GarageImpl;
+import cs414.a5.rjh2h.common.RemoteObserver;
 import cs414.a5.rjh2h.ui.EntryKioskUI;
 import cs414.a5.rjh2h.ui.PhysicalTicketUI;
 
-public class EntryKiosk  implements Observer, ActionListener {
+public class EntryKiosk implements RemoteObserver, ActionListener, Serializable {
 
 	// EntryKiosk is a client implementation that connects to the ParkingGarageServer
 	
+	private static final long serialVersionUID = 1L;
 	private static final int TICKET_LEVEL_WARNING = 10;
 	private EntryKioskUI entryUI;
 	private boolean isGarageOpen;
@@ -43,7 +43,7 @@ public class EntryKiosk  implements Observer, ActionListener {
 			System.out.println(murle);
 			System.exit(-1);
 		} catch (RemoteException re) {
-			System.out.println("RemoteException"); 
+			System.out.println("RemoteException - Make sure server is started"); 
 			System.out.println(re);
 			System.exit(-1);
 		} catch (NotBoundException nbe) {
@@ -52,15 +52,22 @@ public class EntryKiosk  implements Observer, ActionListener {
 			System.exit(-1);
 		}
 		
+		@SuppressWarnings("unused")
 		EntryKiosk entryKiosk = new EntryKiosk(garage);
-
+		
 	}
 	
 	public EntryKiosk(Garage garage) {
 	
 		// set the garage as observer, notify as cars enter
 		this.garage = garage;
-		//this.addObserver(garage);
+		
+		try {
+			this.garage.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// create the entry ui and listen for it's button
 		entryUI = new EntryKioskUI();
@@ -69,7 +76,7 @@ public class EntryKiosk  implements Observer, ActionListener {
 		// create the entry Gate and make sure it starts closed
 		entryGate = new Gate();
 		
-		entryGate.addObserver(this);
+		//entryGate.addObserver(this);
 		
 		entryGate.closeGate();
 		
@@ -79,17 +86,24 @@ public class EntryKiosk  implements Observer, ActionListener {
 	public String toString() {
 		return "EntryKiosk";
 	}
-
-	public void update(Observable o, Object arg) {
-		// Entry observes the ParkingGarage.  If garage is closed, entry is not allowed.
+	
+	public void update(Object o) throws RemoteException {
+		// Entry observes the ParkingGarage and the Gate.  If garage is closed, entry is not allowed.
 		
-		//System.out.println("Update called:" + o + ":" + arg);
+		System.out.println("Update called:" + o );
 		
-		// should get the state from the garage here
+		// should get the state from the garage or gate here
+		String status = null;
 		
-		String statusMessage = (String) arg;
-		
-		switch (statusMessage) {
+		if ( o == garage ) {
+			try {
+				status = garage.getStatus();
+			} catch (RemoteException re) {
+				// do something
+			}	
+		} 	
+			
+		switch (status) {
 			
 			case ("GarageFull"):
 				isGarageOpen = false;
@@ -170,17 +184,24 @@ public class EntryKiosk  implements Observer, ActionListener {
 				// maybe with a notification
 			}
 			
-			// add to the list of physical tickets current out (by number)
-			// RMI FIX //garage.addPhysicalTicket(currentTicket);
-			// also track it as a virtual ticket if possible
-			// RMI FIX //garage.addVirtualTicket(currentTicket);
+			// add to the list of tickets current outstanding
+			try {
+				garage.addTicket(currentTicket);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			entryUI.setMessage1("Press Top Button to Enter");
 	    	entryUI.setMessage2("");
 	    	
-			//setChanged();
-			//notifyObservers("entry");
-			
+			try {
+				garage.updateOccupancy("entry");
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	
 			entryGate.openGateForCar();
 
 			break;
@@ -190,26 +211,32 @@ public class EntryKiosk  implements Observer, ActionListener {
 			entryUI.enableTicketButtons(false);
 			entryUI.enableEnterButton(true);
 
-			// just track it as a virtual ticket (by license plate)
-			// RMI FIX //garage.addVirtualTicket(currentTicket);
+			// add to the list of tickets current outstanding
+			try {
+				garage.addTicket(currentTicket);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		
 			entryUI.setMessage1("Press Top Button to Enter");
 	    	entryUI.setMessage2("");
 	    	
-			//setChanged();
-			//notifyObservers("entry");
-
+	    	try {
+				garage.updateOccupancy("entry");
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	
 			entryGate.openGateForCar();
 
 			break;
-			
 		
 		}
 			
 		
 	}
-	
-	
-	
+
 	
 }

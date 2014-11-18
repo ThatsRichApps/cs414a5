@@ -2,16 +2,13 @@ package cs414.a5.rjh2h;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-
 import javax.swing.Timer;
 
-public class Gate extends Observable {
+public class Gate {
 	
 	private boolean isOpen;
 	private Timer carWaitTimer;
 	public final static int WAIT_TIME = 2000;
-
 	
 	public Gate() {
 		super();
@@ -23,20 +20,26 @@ public class Gate extends Observable {
 		return "Gate";
 	}
 
+	public String getStatus() {
+		if (isOpen) {
+			return ("GateOpen");
+		} else {
+			return ("GateClosed");
+		}
+	}
+	
 	public boolean isOpen() {
 		return isOpen;
 	}
 
 	public void openGate() {
 		this.isOpen = true;
-		setChanged();
-		notifyObservers("GateOpen");
+		// update kiosk
 	}
 	
 	public void closeGate() {
 		this.isOpen = false;
-		setChanged();
-		notifyObservers("GateClosed");
+		// update kiosk
 	}
 	
 	public void openGateForCar () {
@@ -61,15 +64,5 @@ public class Gate extends Observable {
 		carWaitTimer.start();
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
