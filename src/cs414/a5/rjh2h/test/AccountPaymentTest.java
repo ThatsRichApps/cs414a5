@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.AccountPayment;
+import cs414.a5.rjh2h.common.AccountPayment;
 
 public class AccountPaymentTest extends AccountPayment {
 

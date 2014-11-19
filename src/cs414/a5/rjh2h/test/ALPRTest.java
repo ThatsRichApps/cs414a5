@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.ALPR;
+import cs414.a5.rjh2h.common.ALPR;
 
 public class ALPRTest extends ALPR {
 

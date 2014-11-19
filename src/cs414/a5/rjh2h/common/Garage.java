@@ -3,8 +3,6 @@ package cs414.a5.rjh2h.common;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import cs414.a5.rjh2h.Ticket;
-
 public interface Garage extends Remote {
 
 	public String getStatus() throws RemoteException;

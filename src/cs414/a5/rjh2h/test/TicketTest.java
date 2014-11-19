@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.Ticket;
-import cs414.a5.rjh2h.Vehicle;
+import cs414.a5.rjh2h.common.Ticket;
+import cs414.a5.rjh2h.common.Vehicle;
 
 public class TicketTest extends Ticket {
 	

@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import cs414.a5.rjh2h.Login;
+import cs414.a5.rjh2h.common.Login;
 
 public class LoginDialog extends JDialog {
 	

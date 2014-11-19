@@ -9,11 +9,11 @@ import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.Observer;
 
-import cs414.a5.rjh2h.Gate;
-import cs414.a5.rjh2h.Register;
-import cs414.a5.rjh2h.Ticket;
-import cs414.a5.rjh2h.Transaction;
 import cs414.a5.rjh2h.common.Garage;
+import cs414.a5.rjh2h.common.Gate;
+import cs414.a5.rjh2h.common.Register;
+import cs414.a5.rjh2h.common.Ticket;
+import cs414.a5.rjh2h.common.Transaction;
 import cs414.a5.rjh2h.entry.EntryKiosk;
 import cs414.a5.rjh2h.server.GarageImpl;
 import cs414.a5.rjh2h.ui.ExitKioskUI;

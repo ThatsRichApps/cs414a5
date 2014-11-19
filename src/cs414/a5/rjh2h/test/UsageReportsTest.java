@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.UsageReports;
+import cs414.a5.rjh2h.common.UsageReports;
 
 public class UsageReportsTest extends UsageReports {
 

@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.Vehicle;
+import cs414.a5.rjh2h.common.Vehicle;
 
 public class VehicleTest extends Vehicle {
 

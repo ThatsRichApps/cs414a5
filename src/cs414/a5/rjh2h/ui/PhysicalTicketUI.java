@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import cs414.a5.rjh2h.Ticket;
+import cs414.a5.rjh2h.common.Ticket;
 
 public class PhysicalTicketUI extends JFrame {
 

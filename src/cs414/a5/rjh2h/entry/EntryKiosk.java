@@ -8,17 +8,18 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import cs414.a5.rjh2h.Gate;
-import cs414.a5.rjh2h.Ticket;
 import cs414.a5.rjh2h.common.Garage;
+import cs414.a5.rjh2h.common.Gate;
 import cs414.a5.rjh2h.common.RemoteObserver;
+import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.ui.EntryKioskUI;
 import cs414.a5.rjh2h.ui.PhysicalTicketUI;
 
-public class EntryKiosk implements RemoteObserver, ActionListener, Serializable {
+public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, ActionListener, Serializable {
 
 	// EntryKiosk is a client implementation that connects to the ParkingGarageServer
 	
@@ -52,12 +53,17 @@ public class EntryKiosk implements RemoteObserver, ActionListener, Serializable 
 			System.exit(-1);
 		}
 		
-		@SuppressWarnings("unused")
-		EntryKiosk entryKiosk = new EntryKiosk(garage);
+		try {
+			@SuppressWarnings("unused")
+			EntryKiosk entryKiosk = new EntryKiosk(garage);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
-	public EntryKiosk(Garage garage) {
+	public EntryKiosk(Garage garage) throws RemoteException {
 	
 		// set the garage as observer, notify as cars enter
 		this.garage = garage;
@@ -93,7 +99,7 @@ public class EntryKiosk implements RemoteObserver, ActionListener, Serializable 
 		System.out.println("Update called:" + o );
 		
 		// should get the state from the garage or gate here
-		String status = null;
+		String status = "";
 		
 		if ( o == garage ) {
 			try {

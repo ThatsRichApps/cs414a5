@@ -1,4 +1,4 @@
-package cs414.a5.rjh2h;
+package cs414.a5.rjh2h.common;
 
 public class SystemAccount {
 	

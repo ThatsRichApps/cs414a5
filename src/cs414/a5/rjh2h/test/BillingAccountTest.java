@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.BillingAccount;
-import cs414.a5.rjh2h.CreditCard;
+import cs414.a5.rjh2h.common.BillingAccount;
+import cs414.a5.rjh2h.common.CreditCard;
 
 public class BillingAccountTest extends BillingAccount {
 

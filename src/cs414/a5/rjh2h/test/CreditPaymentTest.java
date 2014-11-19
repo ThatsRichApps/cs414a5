@@ -8,8 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.CreditCard;
-import cs414.a5.rjh2h.CreditPayment;
+import cs414.a5.rjh2h.common.CreditCard;
+import cs414.a5.rjh2h.common.CreditPayment;
 
 public class CreditPaymentTest extends CreditPayment {
 

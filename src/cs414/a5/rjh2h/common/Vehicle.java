@@ -1,7 +1,10 @@
-package cs414.a5.rjh2h;
+package cs414.a5.rjh2h.common;
 
-public class Vehicle {
+import java.io.Serializable;
+
+public class Vehicle implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private String licensePlate;
 	
 	public Vehicle() {
