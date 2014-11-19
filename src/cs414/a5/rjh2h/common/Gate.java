@@ -2,9 +2,11 @@ package cs414.a5.rjh2h.common;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+
 import javax.swing.Timer;
 
-public class Gate {
+public class Gate extends Observable {
 	
 	private boolean isOpen;
 	private Timer carWaitTimer;
@@ -35,11 +37,15 @@ public class Gate {
 	public void openGate() {
 		this.isOpen = true;
 		// update kiosk
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void closeGate() {
 		this.isOpen = false;
 		// update kiosk
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void openGateForCar () {

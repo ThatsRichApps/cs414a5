@@ -31,7 +31,7 @@ public class SystemPreferences implements ActionListener {
 		//this.addObserver(garage);
 				
 		systemPrefs.put("rate", "2.00");
-		systemPrefs.put("maximum occupancy", "10");
+		systemPrefs.put("maximum occupancy", "5");
 		systemPrefs.put("max fee", "48.00");
 			
 	}

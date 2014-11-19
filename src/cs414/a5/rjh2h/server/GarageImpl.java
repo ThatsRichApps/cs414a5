@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import cs414.a5.rjh2h.*;
 import cs414.a5.rjh2h.common.*;
 import cs414.a5.rjh2h.ui.*;
 
@@ -41,15 +40,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		garageUI.addSysAdminActionListener(this);
 		garageUI.addShowUsageActionListener(this);
 		
-		@SuppressWarnings("unused")
-		Sign entrySign = new Sign();
-		//addObserver(entrySign);
-		
-		//EntryKiosk entryKiosk = new EntryKiosk(this);
-		//addObserver(entryKiosk);
-		
-		//@SuppressWarnings("unused")
-		//ExitKiosk exitKiosk = new ExitKiosk(this);
+		this.setOpen(true);
 		
 		this.currentOccupancy = 0;
 		
@@ -67,9 +58,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 
 	public void setOpen(boolean isOpen) {
 		this.isOpen = isOpen;
-		//setChanged();
-		//notifyObservers(this);
-		//notifyObservers("GarageOpen");
+		notifyObservers();
 	}
 
 	
@@ -91,14 +80,19 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	
 	public void updateOccupancy(String entryOrExit) {
 		// successful entry or exit, update occupancy and observers
-		if (entryOrExit == "entry") {
+		
+		System.out.println("occupancy update for: " + entryOrExit);
+		
+		if (entryOrExit.equals("entry")) {
+			System.out.println("occupancy = " + currentOccupancy);
 			currentOccupancy++;
-		} else if (entryOrExit == "exit") {
+		} else if (entryOrExit.equals("exit")) {
 			currentOccupancy--;
 			if (currentOccupancy < 0 ) {currentOccupancy = 0;};
 		}
 		
-		garageUI.setMessage("Current Occupancy:" + currentOccupancy);
+		garageUI.setMessage("Current Occupancy: " + currentOccupancy);
+		garageUI.setVisible(true);
 
 		Date timeNow = new Date();
 		dataStorage.updateOccupancyData(timeNow, currentOccupancy);
@@ -114,9 +108,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		}
 			
 	}
-	
-	
-	
 	
 	public void actionPerformed(ActionEvent event) {
 		
@@ -149,6 +140,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	
 	public Ticket getTicketNumber (int ticketNumber) {
 		
+		System.out.println("looking up ticket in dataStorage");
 		return dataStorage.getTicketByNumber(ticketNumber);
 		
 	}
@@ -199,6 +191,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	@Override
 	public void addTicket(Ticket currentTicket) throws RemoteException {
 		// merge these to one...
+		System.out.println("adding ticket to dataStorage");
 		dataStorage.addPhysicalTicket(currentTicket);
 		dataStorage.addVirtualTicket(currentTicket);
 	}

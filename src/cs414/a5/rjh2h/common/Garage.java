@@ -11,5 +11,13 @@ public interface Garage extends Remote {
 	public void addTicket(Ticket currentTicket) throws RemoteException;
 
 	public void updateOccupancy(String string) throws RemoteException;
+
+	public boolean isOpen() throws RemoteException;
+
+	public Ticket getTicketNumber(int ticketNumber) throws RemoteException;
+
+	public Ticket getTicketForLicensePlate(String licensePlate) throws RemoteException;
+
+	public void saveTransaction(Transaction currentTransaction) throws RemoteException;
 	
 }

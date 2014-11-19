@@ -11,21 +11,26 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.common.Gate;
 import cs414.a5.rjh2h.common.RemoteObserver;
+import cs414.a5.rjh2h.common.Sign;
 import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.ui.EntryKioskUI;
 import cs414.a5.rjh2h.ui.PhysicalTicketUI;
 
-public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, ActionListener, Serializable {
+public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, ActionListener, Serializable, Observer {
 
 	// EntryKiosk is a client implementation that connects to the ParkingGarageServer
 	
 	private static final long serialVersionUID = 1L;
 	private static final int TICKET_LEVEL_WARNING = 10;
+	
 	private EntryKioskUI entryUI;
+	private Sign entrySign;
 	private boolean isGarageOpen;
 	private Gate entryGate;
 	private Ticket currentTicket;
@@ -39,6 +44,10 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 		try {
 			garage = (Garage) 
 					Naming.lookup("rmi://" + args[0] + ":" + args[1]  + "/GarageService");
+			
+			@SuppressWarnings("unused")
+			EntryKiosk entryKiosk = new EntryKiosk(garage);
+			
 		} catch (MalformedURLException murle) {
 			System.out.println("MalformedURLException");
 			System.out.println(murle);
@@ -53,38 +62,31 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 			System.exit(-1);
 		}
 		
-		try {
-			@SuppressWarnings("unused")
-			EntryKiosk entryKiosk = new EntryKiosk(garage);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	
 	public EntryKiosk(Garage garage) throws RemoteException {
-	
-		// set the garage as observer, notify as cars enter
+		
 		this.garage = garage;
 		
-		try {
-			this.garage.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// create the entry ui and listen for it's button
+		// create the entry ui and listen for it's buttons
 		entryUI = new EntryKioskUI();
 		entryUI.addButtonActionListener(this);
 		
 		// create the entry Gate and make sure it starts closed
 		entryGate = new Gate();
-		
-		//entryGate.addObserver(this);
+		entryGate.addObserver(this);
 		
 		entryGate.closeGate();
+		
+		entrySign = new Sign();
+		
+		try {
+			this.garage.addObserver(this);
+			setGarageOpen(this.garage.isOpen());
+		} catch (RemoteException re) {
+			// do something
+		}	
 		
 	}
 
@@ -92,16 +94,36 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 	public String toString() {
 		return "EntryKiosk";
 	}
+
+	public void setGarageOpen(boolean isGarageOpen) {
+		this.isGarageOpen = isGarageOpen;
 	
+		if (isGarageOpen) {
+			
+	    	entryUI.setMessage1("Press Top Button to Enter");
+			entryUI.setMessage2("");
+			entrySign.setMessage("Garage is Open");
+			entryUI.enableEnterButton(isGarageOpen);
+			
+		} else {
+		
+			entryUI.setMessage1("Garage is Full");
+			entryUI.setMessage2("");
+			entrySign.setMessage("Garage is Full");
+			entryUI.enableEnterButton(isGarageOpen);
+		
+		}
+
+	}
+
 	public void update(Object o) throws RemoteException {
-		// Entry observes the ParkingGarage and the Gate.  If garage is closed, entry is not allowed.
+		// Entry observes the ParkingGarage.  If garage is closed, entry is not allowed.
+		//System.out.println("garage state change");
 		
-		System.out.println("Update called:" + o );
-		
-		// should get the state from the garage or gate here
+		// get the state from the garage
 		String status = "";
 		
-		if ( o == garage ) {
+		if (o.equals(garage)) {
 			try {
 				status = garage.getStatus();
 			} catch (RemoteException re) {
@@ -112,29 +134,13 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 		switch (status) {
 			
 			case ("GarageFull"):
-				isGarageOpen = false;
-		    	entryUI.setMessage1("Garage is Full");
-				entryUI.setMessage2("");
-				entryUI.enableEnterButton(isGarageOpen);
+				setGarageOpen(false);
 	    		break;
 			case ("GarageOpen"):
-				isGarageOpen = true;
-		    	entryUI.setMessage1("Press Top Button to Enter");
-				entryUI.setMessage2("");
-				entryUI.enableEnterButton(isGarageOpen);
-				break;
-			case ("GateOpen"):
-				entryUI.setGateStatus(true);
-				entryUI.enableEnterButton(false);
-				break;
-			case ("GateClosed"):	
-				entryUI.setGateStatus(false);
-				entryUI.enableEnterButton(false);
-				entryUI.enableEnterButton(isGarageOpen);
+				setGarageOpen(true);
 				break;
 
 		}
-				
 		
 	}
 	
@@ -148,6 +154,7 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 			
 			// first the driver presses the enter button, this creates a ticket
 			ticketNumber++;
+			// need to get the next ticket from the garage, not increment here
 			
 			// if the rate changes, this driver only has to pay the rate at the time
 			// that the ticket is tendered, therefore, we store this on / with the ticket
@@ -189,26 +196,20 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 				// warn someone that the physical ticket level is low
 				// maybe with a notification
 			}
+
+			entryUI.setMessage1("Press Top Button to Enter");
+	    	entryUI.setMessage2("");
+	    	
+			entryGate.openGateForCar();
 			
 			// add to the list of tickets current outstanding
 			try {
 				garage.addTicket(currentTicket);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			entryUI.setMessage1("Press Top Button to Enter");
-	    	entryUI.setMessage2("");
-	    	
-			try {
 				garage.updateOccupancy("entry");
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	    	
-			entryGate.openGateForCar();
 
 			break;
 			
@@ -216,32 +217,49 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 
 			entryUI.enableTicketButtons(false);
 			entryUI.enableEnterButton(true);
-
+			
+			entryUI.setMessage1("Press Top Button to Enter");
+	    	entryUI.setMessage2("");
+			entryGate.openGateForCar();
+			
 			// add to the list of tickets current outstanding
 			try {
 				garage.addTicket(currentTicket);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		
-			entryUI.setMessage1("Press Top Button to Enter");
-	    	entryUI.setMessage2("");
-	    	
-	    	try {
 				garage.updateOccupancy("entry");
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	    	
-			entryGate.openGateForCar();
 
 			break;
 		
 		}
-			
 		
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		// Entry observes the gate with a standard java observable / observer 
+		
+		// get the state
+		String status = "";
+		
+		if (o.equals(entryGate)) {
+			status = entryGate.getStatus();
+		} 	
+		
+		switch (status) {
+			case ("GateOpen"):
+				entryUI.setGateStatus(true);
+				entryUI.enableEnterButton(false);
+				break;
+			case ("GateClosed"):	
+				entryUI.setGateStatus(false);
+				entryUI.enableEnterButton(false);
+				entryUI.enableEnterButton(isGarageOpen);
+				break;
+		}
 	}
 
 	

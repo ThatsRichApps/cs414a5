@@ -2,6 +2,7 @@ package cs414.a5.rjh2h.exit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -14,14 +15,10 @@ import cs414.a5.rjh2h.common.Gate;
 import cs414.a5.rjh2h.common.Register;
 import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.common.Transaction;
-import cs414.a5.rjh2h.entry.EntryKiosk;
-import cs414.a5.rjh2h.server.GarageImpl;
 import cs414.a5.rjh2h.ui.ExitKioskUI;
 
-public class ExitKiosk extends Observable implements Observer,ActionListener {
+public class ExitKiosk implements ActionListener, Observer {
 
-	// Parking Garage observes ExitKiosk to know when cars leave
-	
 	private ExitKioskUI exitUI;
 	private Garage garage;
 	private Register register;
@@ -34,6 +31,10 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 		try {
 			garage = (Garage) 
 					Naming.lookup("rmi://" + args[0] + ":" + args[1]  + "/GarageService");
+
+			@SuppressWarnings("unused")
+			ExitKiosk exitKiosk = new ExitKiosk(garage);
+		
 		} catch (MalformedURLException murle) {
 			System.out.println("MalformedURLException");
 			System.out.println(murle);
@@ -48,20 +49,12 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 			System.exit(-1);
 		}
 		
-		ExitKiosk exitKiosk = new ExitKiosk(garage);
 		
 	}
 	
-	
-	
-	public ExitKiosk() {
-		
-	}
-	
-	public ExitKiosk(Garage garage) {
+	public ExitKiosk(Garage garage) throws RemoteException {
 		// set the garage as the observer to track car exit
 		this.garage = garage;
-		this.addObserver(garage);
 		
 		// create the exit kiosk UI and listen for actions
 		exitUI = new ExitKioskUI();
@@ -82,11 +75,20 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 		
 		// create a cash register for taking payments
 		register = new Register();
+	
 		// pass the exitGate so that the cashier can open it too
 		register.setExitKiosk(this);
 		
 		currentTicket = null;
 		currentTransaction = null;
+		
+		/*
+		try {
+			this.garage.addObserver(this);
+		} catch (RemoteException re) {
+			// do something
+		}
+		*/	
 				
 	}
 
@@ -136,7 +138,15 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 	private void lookupTicket() {
 		
 		int ticketNumber = exitUI.getTicketNumber();
-		currentTicket = garage.getTicketNumber(ticketNumber);
+		
+		System.out.println("looking up ticket number: " + ticketNumber);
+		
+		try {
+			currentTicket = garage.getTicketNumber(ticketNumber);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (currentTicket == null) {
 			// handle ticket not found
@@ -158,7 +168,12 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 	
 	private void lookupLicense() {
 		String licensePlate = exitUI.getLicensePlate();
-		currentTicket = garage.getTicketForLicensePlate(licensePlate);
+		try {
+			currentTicket = garage.getTicketForLicensePlate(licensePlate);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (currentTicket == null) {
 			// handle ticket not found
 			exitUI.setMessage("Ticket Not Found");
@@ -178,7 +193,7 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 	
 	private void lostTicket() {
 		currentTicket = new Ticket();  // create a dummy ticket
-		currentTransaction = new Transaction(garage.getSystemPreferences().getMaxFee());
+		//currentTransaction = new Transaction(garage.getSystemPreferences().getMaxFee());
 		String message = "Lost Ticket, Max Fee ";
 		exitUI.setMessage(message);
 		exitUI.setPaymentMessage("You owe: $" + currentTransaction.getAmount());
@@ -190,10 +205,15 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 	}
 	
 	public void openGate() {
-		setChanged();
-		notifyObservers("exit");
+		try {
+			garage.updateOccupancy("exit");
+			garage.saveTransaction(currentTransaction);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//register.resetUI();
-		garage.saveTransaction(currentTransaction);
 		
 		currentTicket = null;
 		currentTransaction = null;
@@ -204,15 +224,27 @@ public class ExitKiosk extends Observable implements Observer,ActionListener {
 		exitGate.openGateForCar();
 	}
 	
+	@Override
 	public void update(Observable o, Object arg) {
-
-		// Exit observes the exit gate, waits for cars to exit
-		if (arg == "GateOpen") {
-			exitUI.setGateStatus(true);
-		} else if (arg == "GateClosed") {
-			exitUI.setGateStatus(false);
+		
+		// Entry observes the gate with a standard java observable / observer 
+		
+		// get the state
+		String status = "";
+		
+		if (o.equals(exitGate)) {
+			status = exitGate.getStatus();
+		} 	
+		
+		switch (status) {
+			case ("GateOpen"):
+				exitUI.setGateStatus(true);
+				break;
+			case ("GateClosed"):	
+				exitUI.setGateStatus(false);
+				break;
 		}
-	
 	}
+
 	
 }
