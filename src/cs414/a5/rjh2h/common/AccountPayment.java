@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 public class AccountPayment extends Payment {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// the car license plate is the billing account number or key
 	private String licensePlate;
 	

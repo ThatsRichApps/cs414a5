@@ -158,8 +158,13 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 			
 			// if the rate changes, this driver only has to pay the rate at the time
 			// that the ticket is tendered, therefore, we store this on / with the ticket
-			// RMI FIX // BigDecimal currentRate = garage.getSystemPreferences().getHourlyFee();
-			BigDecimal currentRate = new BigDecimal("2.50");
+			BigDecimal currentRate;
+			try {
+				currentRate = garage.getRate();
+			} catch (RemoteException e2) {
+				e2.printStackTrace();
+				currentRate = new BigDecimal("2.50");
+			}
 			
 			currentTicket = new Ticket(ticketNumber, currentRate);
 			

@@ -1,5 +1,6 @@
 package cs414.a5.rjh2h.common;
 
+import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -19,5 +20,9 @@ public interface Garage extends Remote {
 	public Ticket getTicketForLicensePlate(String licensePlate) throws RemoteException;
 
 	public void saveTransaction(Transaction currentTransaction) throws RemoteException;
+
+	public BigDecimal getRate() throws RemoteException;
+
+	public BigDecimal getMaxFee() throws RemoteException;
 	
 }

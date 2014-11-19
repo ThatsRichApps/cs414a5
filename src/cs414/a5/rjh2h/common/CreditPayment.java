@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 public class CreditPayment extends Payment {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String cardNumber;
 	private int expMonth;
 	private int expYear;

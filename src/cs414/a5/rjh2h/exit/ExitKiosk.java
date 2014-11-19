@@ -2,7 +2,6 @@ package cs414.a5.rjh2h.exit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -82,13 +81,6 @@ public class ExitKiosk implements ActionListener, Observer {
 		currentTicket = null;
 		currentTransaction = null;
 		
-		/*
-		try {
-			this.garage.addObserver(this);
-		} catch (RemoteException re) {
-			// do something
-		}
-		*/	
 				
 	}
 
@@ -193,7 +185,12 @@ public class ExitKiosk implements ActionListener, Observer {
 	
 	private void lostTicket() {
 		currentTicket = new Ticket();  // create a dummy ticket
-		//currentTransaction = new Transaction(garage.getSystemPreferences().getMaxFee());
+		try {
+			currentTransaction = new Transaction(garage.getMaxFee());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String message = "Lost Ticket, Max Fee ";
 		exitUI.setMessage(message);
 		exitUI.setPaymentMessage("You owe: $" + currentTransaction.getAmount());

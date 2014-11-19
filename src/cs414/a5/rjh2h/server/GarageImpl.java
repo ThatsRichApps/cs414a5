@@ -2,6 +2,7 @@ package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -107,6 +108,18 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 			notifyObservers();
 		}
 			
+	}
+	
+	public BigDecimal getRate() {
+		
+		return getSystemPreferences().getRate();
+		
+	}
+	
+	public BigDecimal getMaxFee() {
+		
+		return getSystemPreferences().getMaxFee();
+		
 	}
 	
 	public void actionPerformed(ActionEvent event) {

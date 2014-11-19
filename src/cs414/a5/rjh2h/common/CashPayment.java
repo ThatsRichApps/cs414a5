@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 public class CashPayment extends Payment {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private BigDecimal cashTendered;
 	private BigDecimal change;
 	

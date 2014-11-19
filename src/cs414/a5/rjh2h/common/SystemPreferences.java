@@ -55,7 +55,7 @@ public class SystemPreferences implements ActionListener {
 		this.systemAccountList = systemAccountList;
 	}
 
-	public BigDecimal getHourlyFee() {
+	public BigDecimal getRate() {
 		return (new BigDecimal(systemPrefs.get("rate")));
 	}
 
