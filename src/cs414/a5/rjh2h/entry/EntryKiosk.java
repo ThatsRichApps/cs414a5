@@ -17,7 +17,6 @@ import java.util.Observer;
 import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.common.Gate;
 import cs414.a5.rjh2h.common.RemoteObserver;
-import cs414.a5.rjh2h.common.Sign;
 import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.ui.EntryKioskUI;
 import cs414.a5.rjh2h.ui.PhysicalTicketUI;
@@ -34,7 +33,6 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 	private boolean isGarageOpen;
 	private Gate entryGate;
 	private Ticket currentTicket;
-	private int ticketNumber = 0; 
 	private int ticketLevel = 1000;
 	
 	private Garage garage;
@@ -153,8 +151,16 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 		case "EnterButton": 
 			
 			// first the driver presses the enter button, this creates a ticket
-			ticketNumber++;
-			// need to get the next ticket from the garage, not increment here
+			
+			// need to get the next available ticket number from the garage
+			int ticketNumber;
+			try {
+				ticketNumber = garage.getNextTicketID();
+			} catch (RemoteException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+				ticketNumber = 9999;
+			} 
 			
 			// if the rate changes, this driver only has to pay the rate at the time
 			// that the ticket is tendered, therefore, we store this on / with the ticket
@@ -237,7 +243,17 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 			}
 
 			break;
-		
+			
+		case "NoThanks":
+
+			entryUI.enableTicketButtons(false);
+			entryUI.enableEnterButton(true);
+			
+			entryUI.setMessage1("Press Top Button to Enter");
+	    	entryUI.setMessage2("");
+			
+			break;	
+			
 		}
 		
 	}

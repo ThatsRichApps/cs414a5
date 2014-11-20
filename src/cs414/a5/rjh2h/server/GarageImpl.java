@@ -25,6 +25,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	@SuppressWarnings("unused")
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
+	private int ticketID = 100;
 	
 	private ArrayList<RemoteObserver> observers = new ArrayList<RemoteObserver>();
 	
@@ -46,7 +47,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		this.currentOccupancy = 0;
 		
 	}
-	
 	
 	@Override
 	public String toString() {
@@ -124,6 +124,10 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	
 	public void actionPerformed(ActionEvent event) {
 		
+		// this is the action listener for the buttons on the garageUI
+		// launches an adminUI for changing preferences and a usageReportsUI for 
+		// viewing using data
+		
 		String eventName = event.getActionCommand();
 		
 		switch (eventName) {
@@ -138,7 +142,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		}
 	}
 	
-
 	public void addVirtualTicket(Ticket ticket) {
 		
 		dataStorage.addVirtualTicket(ticket);
@@ -153,7 +156,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	
 	public Ticket getTicketNumber (int ticketNumber) {
 		
-		System.out.println("looking up ticket in dataStorage");
 		return dataStorage.getTicketByNumber(ticketNumber);
 		
 	}
@@ -209,6 +211,23 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		dataStorage.addVirtualTicket(currentTicket);
 	}
 	
+	@Override
+	public int getNextTicketID() throws RemoteException {
+		ticketID++;
+		return ticketID;
+	}
+	
+	@SuppressWarnings("unused")
+	private void simulateData() {
+		
+		
+		
+		
+		
+		
+		
+	}
+
 	
 	
 	

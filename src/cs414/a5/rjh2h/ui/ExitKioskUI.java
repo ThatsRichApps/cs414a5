@@ -1,6 +1,7 @@
 package cs414.a5.rjh2h.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -35,13 +36,20 @@ public class ExitKioskUI extends JFrame {
 	
     private JButton payCashButton;
     private JButton payOnAccountButton;
+    private JButton canNotPayButton;
     
     private JFormattedTextField creditCardField;
     
 	public ExitKioskUI() {
+	
 		initUI();
+		// first the ticket needs to be entered and validated
 		enableFindTicketButtons(true);
+		// then the payment should be selected
 		enablePaymentFields(false);
+		// start with the gate closed
+		setGateStatus(false);
+	
 	}
 	
 	@Override
@@ -118,11 +126,13 @@ public class ExitKioskUI extends JFrame {
         
         payOnAccountButton = new JButton("Pay on Account");
         payOnAccountButton.setActionCommand("PayOnAccount");
+    
+        canNotPayButton = new JButton("I Can Not Pay");
+        canNotPayButton.setActionCommand("CanNotPay");
         
-        
-        gateStatusLabel = new JLabel("Gate is Closed", SwingConstants.CENTER);
+        gateStatusLabel = new JLabel("", SwingConstants.CENTER);
 		
-        JPanel pane = new JPanel(new GridLayout(11, 1));
+        JPanel pane = new JPanel(new GridLayout(12, 1));
         
         pane.add(topMessageLabel);
         pane.add(enterTicketField);
@@ -136,6 +146,7 @@ public class ExitKioskUI extends JFrame {
         pane.add(creditCardField);
         pane.add(payOnAccountButton);
         pane.add(payCashButton);
+        pane.add(canNotPayButton);
         
         pane.add(gateStatusLabel);
         
@@ -177,7 +188,6 @@ public class ExitKioskUI extends JFrame {
 		String licensePlate = licensePlateField.getText();
 		return licensePlate;
 	}
-	    
     
 	public void setMessage(String message) {
 		messageLabel.setText(message);
@@ -191,7 +201,6 @@ public class ExitKioskUI extends JFrame {
 		selectPaymentMessageLabel.setText(message);
 	}
 	
-
 	public void addTicketFieldActionListener(ActionListener listener) {
 	    enterTicketField.addActionListener(listener);
 	}
@@ -220,6 +229,7 @@ public class ExitKioskUI extends JFrame {
 		creditCardField.setEnabled(enabled);
 		payCashButton.setEnabled(enabled);
 		payOnAccountButton.setEnabled(enabled);
+		canNotPayButton.setEnabled(enabled);
 	}
 	
 	public void enableFindTicketButtons(Boolean enabled) {
@@ -228,12 +238,13 @@ public class ExitKioskUI extends JFrame {
 		lostTicketButton.setEnabled(enabled);
 	}
 	
-	
 	public void setGateStatus (boolean isOpen) {
 		if (isOpen) {
 			gateStatusLabel.setText("Gate is Open, wait for car exit");
+			gateStatusLabel.setForeground(Color.green);
 		} else {
 			gateStatusLabel.setText("Gate is Closed");
+			gateStatusLabel.setForeground(Color.red);
 		}
 	}
 

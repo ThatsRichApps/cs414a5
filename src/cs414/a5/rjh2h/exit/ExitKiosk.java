@@ -11,7 +11,6 @@ import java.util.Observer;
 
 import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.common.Gate;
-import cs414.a5.rjh2h.common.Register;
 import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.common.Transaction;
 import cs414.a5.rjh2h.ui.ExitKioskUI;

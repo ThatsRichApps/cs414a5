@@ -12,6 +12,7 @@ import cs414.a5.rjh2h.common.AccountPayment;
 
 public class AccountPaymentTest extends AccountPayment {
 
+	private static final long serialVersionUID = 1L;
 	private AccountPayment accountPaymentTest;
 
 	@Before

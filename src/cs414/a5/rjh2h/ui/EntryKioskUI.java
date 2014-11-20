@@ -1,8 +1,10 @@
 package cs414.a5.rjh2h.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,9 +14,6 @@ import javax.swing.SwingConstants;
 
 public class EntryKioskUI extends JFrame {	
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5276264018987914144L;
 	private String title;
 	private String message1;
@@ -26,6 +25,7 @@ public class EntryKioskUI extends JFrame {
 	private JButton enterButton;
 	private JButton dispenseTicketButton;
 	private JButton virtualTicketButton;
+	private JButton noThanksButton;
 	
 	private JLabel gateStatusLabel;
 	
@@ -51,8 +51,10 @@ public class EntryKioskUI extends JFrame {
 	public void setGateStatus (boolean isOpen) {
 		if (isOpen) {
 			gateStatusLabel.setText("Gate is Open, wait for car entry");
+			gateStatusLabel.setForeground(Color.green);
 		} else {
 			gateStatusLabel.setText("Gate is Closed");
+			gateStatusLabel.setForeground(Color.red);
 		}
 	}
 	
@@ -60,10 +62,10 @@ public class EntryKioskUI extends JFrame {
 		enterButton.setEnabled(buttonEnabled);
 	}
 	
-
 	public void enableTicketButtons(boolean buttonEnabled) {
 		dispenseTicketButton.setEnabled(buttonEnabled);
 		virtualTicketButton.setEnabled(buttonEnabled);
+		noThanksButton.setEnabled(buttonEnabled);
 	}
 	
 	public void addButtonActionListener(ActionListener listener) {
@@ -71,6 +73,7 @@ public class EntryKioskUI extends JFrame {
 		enterButton.addActionListener(listener);
 	    dispenseTicketButton.addActionListener(listener);
 	    virtualTicketButton.addActionListener(listener);
+	    noThanksButton.addActionListener(listener);
 	
 	}
 	
@@ -89,21 +92,25 @@ public class EntryKioskUI extends JFrame {
 	    enterButton = new JButton("Press to Enter Garage");
 		dispenseTicketButton = new JButton ("Dispense Ticket");
 		virtualTicketButton = new JButton ("Virtual Ticket");
+		noThanksButton = new JButton ("No Thanks (car leaves)");
 		
 		// intialize the ticket buttons as disabled
 	    dispenseTicketButton.setEnabled(false);
 	    virtualTicketButton.setEnabled(false);
+	    noThanksButton.setEnabled(false);
 	    
 		enterButton.setActionCommand("EnterButton");
 		dispenseTicketButton.setActionCommand("DispenseTicketButton");
 		virtualTicketButton.setActionCommand("VirtualTicketButton");
+		noThanksButton.setActionCommand("NoThanks");
 		
 		gateStatusLabel = new JLabel("", SwingConstants.CENTER);
 		
-        JPanel pane = new JPanel(new GridLayout(6, 0));
+        JPanel pane = new JPanel(new GridLayout(7, 0));
         pane.add(enterButton);
         pane.add(dispenseTicketButton);
         pane.add(virtualTicketButton);
+        pane.add(noThanksButton);
         
         pane.add(messageLabel1);
         pane.add(messageLabel2);

@@ -16,7 +16,8 @@ public class DataStorage {
 	public DataStorage() {
 		
 		// initialize any pre startup test data here
-		
+		initializeData();
+	
 	}
 	
 	@Override
@@ -99,6 +100,13 @@ public class DataStorage {
 		
 	}
 
+	private void initializeData() {
+		
+		// loop through a few hundred entries and exits
+		
+		//Date monthsBack = Date() - 100000;
+		
+	}
 	
 
 }

@@ -30,6 +30,10 @@ public class RegisterUI extends JFrame {
 	private JLabel accountNumberLabel;
 	private JButton paidButton;
 	private JButton openGateButton;
+	private JLabel driverNameLabel;
+	private JFormattedTextField driverNameField;
+	private JLabel licensePlateLabel;
+	private JFormattedTextField licensePlateField;
 	
     public RegisterUI () {
     	initUI();
@@ -63,12 +67,18 @@ public class RegisterUI extends JFrame {
         paidOnAccountLabel = new JLabel("Paid On Account:", SwingConstants.CENTER);
         accountNumberLabel = new JLabel("", SwingConstants.CENTER);
         
+        driverNameLabel = new JLabel ("Driver Name:", SwingConstants.CENTER);
+    	driverNameField = new JFormattedTextField();
+    	licensePlateLabel = new JLabel("License Plate:", SwingConstants.CENTER);
+    	licensePlateField = new JFormattedTextField();
+    	
         paidButton = new JButton("Paid");
         paidButton.setActionCommand("Paid");
+        
         openGateButton = new JButton("Can Not Pay");
         openGateButton.setActionCommand("OpenGate");
         
-        JPanel pane = new JPanel(new GridLayout(6, 2));
+        JPanel pane = new JPanel(new GridLayout(8, 2));
         
         pane.add(amountDueLabel);
         pane.add(amountLabel);
@@ -85,6 +95,11 @@ public class RegisterUI extends JFrame {
         pane.add(paidOnAccountLabel);
         pane.add(accountNumberLabel);
         
+        pane.add(driverNameLabel);
+        pane.add(driverNameField);
+        pane.add(licensePlateLabel);
+        pane.add(licensePlateField);
+    	
         pane.add(paidButton);
         pane.add(openGateButton);
         

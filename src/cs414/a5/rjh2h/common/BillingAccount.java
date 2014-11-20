@@ -9,7 +9,6 @@ public class BillingAccount implements Serializable {
 	private String lastName;
 	private String address;
 	private String licensePlate;
-	private CreditCard creditCard;
 	
 	public BillingAccount() {
 		super();
@@ -41,10 +40,6 @@ public class BillingAccount implements Serializable {
 		return licensePlate;
 	}
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -59,10 +54,6 @@ public class BillingAccount implements Serializable {
 
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
-	}
-
-	public void setCreditCard(CreditCard creditCard) {
-		this.creditCard = creditCard;
 	}
 	
 }

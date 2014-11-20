@@ -1,4 +1,4 @@
-package cs414.a5.rjh2h.common;
+package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import cs414.a5.rjh2h.common.DataStorage;
 import cs414.a5.rjh2h.ui.UsageReportsUI;
 
 public class UsageReports implements ActionListener {

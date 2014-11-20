@@ -1,4 +1,4 @@
-package cs414.a5.rjh2h.common;
+package cs414.a5.rjh2h.entry;
 
 import java.util.Observable;
 import java.util.Observer;

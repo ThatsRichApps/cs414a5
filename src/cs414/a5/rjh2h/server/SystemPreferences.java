@@ -1,4 +1,4 @@
-package cs414.a5.rjh2h.common;
+package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 //import java.util.Observable;
 
-import cs414.a5.rjh2h.server.GarageImpl;
+
+import cs414.a5.rjh2h.common.SystemAccount;
 import cs414.a5.rjh2h.ui.SysAdminUI;
 
 public class SystemPreferences implements ActionListener {

@@ -12,6 +12,7 @@ import cs414.a5.rjh2h.common.CashPayment;
 
 public class CashPaymentTest extends CashPayment {
 	
+	private static final long serialVersionUID = 1L;
 	private CashPayment cashPayment;
 	
 	@Before
