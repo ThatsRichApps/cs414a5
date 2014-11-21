@@ -221,7 +221,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		return ticketID;
 	}
 	
-	@SuppressWarnings("unused")
 	private void simulateData() {
 		
 	    Calendar calendar = Calendar.getInstance();

@@ -4,10 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.text.NumberFormat;
-import java.text.ParseException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,14 +29,16 @@ public class ExitKioskUI extends JFrame {
     private JLabel paymentMessageLabel;
     private JLabel selectPaymentMessageLabel;
     
-    private JLabel gateStatusLabel;
-	
+    private JFormattedTextField creditCardField;
+    private JFormattedTextField creditCardMMYYYYField;
+    
     private JButton payCashButton;
     private JButton payOnAccountButton;
+    private JButton payCreditButton;
     private JButton canNotPayButton;
     
-    private JFormattedTextField creditCardField;
-    private JFormattedTextField creditCardMMYYField;
+    private JLabel gateStatusLabel;
+    private JLabel paymentStatusLabel;
     
     
 	public ExitKioskUI() {
@@ -67,27 +66,28 @@ public class ExitKioskUI extends JFrame {
         
         messageLabel = new JLabel("", SwingConstants.CENTER);
         
-        
         // create enter ticket field with integer as input   
         enterTicketField = new JFormattedTextField(NumberFormat.getIntegerInstance());
         enterTicketField.setFocusLostBehavior(JFormattedTextField.PERSIST);
         enterTicketField.setActionCommand("TicketField");
-        enterTicketField.setText("1");
+        //enterTicketField.setText("1");
         
+        /*
         try {
 			enterTicketField.commitEdit();
 		} catch (ParseException e) {
 			// catch block
 			e.printStackTrace();
 		}
-        
+		*/
 
         // create enter license plate field   
         licensePlateField = new JFormattedTextField(createFormatter("UU-UUU-###"));
         licensePlateField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
         licensePlateField.setActionCommand("LicenseField");
-        licensePlateField.setText("CO-AAA-111");
+        //licensePlateField.setText("CO-AAA-111");
         
+        /*
         licensePlateField.addFocusListener(new FocusListener(){
             @Override
             public void focusGained(FocusEvent e){
@@ -99,6 +99,7 @@ public class ExitKioskUI extends JFrame {
 				// do nothing 
 			}
         });
+        */
         
         lostTicketButton = new JButton("Lost Ticket");
         lostTicketButton.setActionCommand("LostTicket");
@@ -108,10 +109,12 @@ public class ExitKioskUI extends JFrame {
         
         creditCardField = new JFormattedTextField(createFormatter("#### #### #### ####"));
         creditCardField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-        creditCardField.setActionCommand("PayCreditCard");
-        creditCardField.setText("1111 1111 1111 11111");
+        //creditCardField.setActionCommand("PayCreditCard");
+        //creditCardField.setText("1111 1111 1111 11111");
         
         // clear the 1111... field when clicked
+        
+        /*
         creditCardField.addFocusListener(new FocusListener(){
             @Override
             public void focusGained(FocusEvent e){
@@ -123,12 +126,14 @@ public class ExitKioskUI extends JFrame {
 				// do nothing 
 			}
         });
+        */
         
-        creditCardMMYYField = new JFormattedTextField(createFormatter("##/####"));
-        creditCardMMYYField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-        creditCardMMYYField.setActionCommand("CreditCardMMYY");
-        creditCardMMYYField.setText("11/2014");
+        creditCardMMYYYYField = new JFormattedTextField(createFormatter("##/####"));
+        creditCardMMYYYYField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+        creditCardMMYYYYField.setActionCommand("CreditCardMMYY");
+        //creditCardMMYYField.setText("11/2014");
         
+        /*
         // clear the field when clicked
         creditCardMMYYField.addFocusListener(new FocusListener(){
             @Override
@@ -141,9 +146,13 @@ public class ExitKioskUI extends JFrame {
 				// do nothing 
 			}
         });
+        */
         
         payCashButton = new JButton("Pay by Cash");
         payCashButton.setActionCommand("PayCash");
+        
+        payCreditButton = new JButton("Charge Card");
+        payCreditButton.setActionCommand("PayCreditCard");
         
         payOnAccountButton = new JButton("Pay on Account");
         payOnAccountButton.setActionCommand("PayOnAccount");
@@ -152,26 +161,44 @@ public class ExitKioskUI extends JFrame {
         canNotPayButton.setActionCommand("CanNotPay");
         
         gateStatusLabel = new JLabel("", SwingConstants.CENTER);
+        paymentStatusLabel = new JLabel("", SwingConstants.CENTER);
 		
-        JPanel pane = new JPanel(new GridLayout(13, 1));
+        JPanel pane = new JPanel(new GridLayout(12, 2));
         
         pane.add(topMessageLabel);
+        pane.add(new JLabel("", SwingConstants.CENTER));
+        
+        pane.add(new JLabel("Ticket Number:", SwingConstants.CENTER));
         pane.add(enterTicketField);
+        
+        pane.add(new JLabel("License Plate:", SwingConstants.CENTER));
         pane.add(licensePlateField);
+        
+        pane.add(new JLabel("Lost Ticket:", SwingConstants.CENTER));
         pane.add(lostTicketButton);
+        
+        pane.add(new JLabel("", SwingConstants.CENTER));
         pane.add(messageLabel);
-
+        
+        pane.add(new JLabel("", SwingConstants.CENTER));
         pane.add(paymentMessageLabel);
         
         pane.add(selectPaymentMessageLabel);
+        pane.add(new JLabel("", SwingConstants.CENTER));
+        
+        pane.add(new JLabel("Card Number:", SwingConstants.CENTER));
         pane.add(creditCardField);
-        pane.add(creditCardMMYYField);
+        
+        pane.add(new JLabel("Exp Date (MM/YYYY)", SwingConstants.CENTER));
+        pane.add(creditCardMMYYYYField);
         
         pane.add(payOnAccountButton);
+        pane.add(payCreditButton);
         pane.add(payCashButton);
         pane.add(canNotPayButton);
         
         pane.add(gateStatusLabel);
+        pane.add(paymentStatusLabel);
         
         pane.setBorder(BorderFactory.createEmptyBorder(
                                         30, //top
@@ -202,6 +229,32 @@ public class ExitKioskUI extends JFrame {
     	return creditCardField.getText();
     }
     
+    public int getExpMonth() {
+    	String expiration = creditCardMMYYYYField.getText();
+    	String[] parts = expiration.split("/");
+    	int month;
+    	try {
+    		month = Integer.parseInt(parts[0]);
+    	} catch (NumberFormatException e) { 
+    		month = 0;
+    	}
+    		
+    		
+    	return (month);
+    }
+    
+    public int getExpYear() {
+    	String expiration = creditCardMMYYYYField.getText();
+    	String[] parts = expiration.split("/");
+    	int year;
+    	try {
+    		year = Integer.parseInt(parts[1]);
+    	} catch (NumberFormatException e) { 
+    		year = 0;
+    	}
+    	return (year);
+    }
+    
 	public int getTicketNumber () {	
 		int ticketNumber = Integer.parseInt(enterTicketField.getText());
 		return ticketNumber;
@@ -224,32 +277,20 @@ public class ExitKioskUI extends JFrame {
 		selectPaymentMessageLabel.setText(message);
 	}
 	
-	public void addTicketFieldActionListener(ActionListener listener) {
-	    enterTicketField.addActionListener(listener);
-	}
-
-	public void addLicenseFieldActionListener(ActionListener listener) {
-	    licensePlateField.addActionListener(listener);
-	}
-
-	public void addLostTicketButtonActionListener(ActionListener listener) {
+	public void addActionListeners(ActionListener listener) {
+		enterTicketField.addActionListener(listener);
+		licensePlateField.addActionListener(listener);
 	    lostTicketButton.addActionListener(listener);
-	}
-	
-	public void addCreditCardFieldActionListener(ActionListener listener) {
-	    creditCardField.addActionListener(listener);
-	}
-	
-	public void addPayCashButtonActionListener(ActionListener listener) {
+	    payCreditButton.addActionListener(listener);
 	    payCashButton.addActionListener(listener);
-	}
-	
-	public void addPayOnAccountButtonActionListener(ActionListener listener) {
 	    payOnAccountButton.addActionListener(listener);
+	    canNotPayButton.addActionListener(listener);
 	}
 	
 	public void enablePaymentFields(boolean enabled) {
 		creditCardField.setEnabled(enabled);
+		creditCardMMYYYYField.setEnabled(enabled);
+		payCreditButton.setEnabled(enabled);
 		payCashButton.setEnabled(enabled);
 		payOnAccountButton.setEnabled(enabled);
 		canNotPayButton.setEnabled(enabled);

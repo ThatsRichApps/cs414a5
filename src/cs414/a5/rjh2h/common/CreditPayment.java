@@ -1,6 +1,7 @@
 package cs414.a5.rjh2h.common;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 public class CreditPayment extends Payment {
 	
@@ -58,11 +59,23 @@ public class CreditPayment extends Payment {
 	public boolean initiatePayment() {
 		
 		// charge card here
-		if (this.cardNumber == "0000 0000 0000 0000") {
+		if (this.cardNumber.equals("0000 0000 0000 0000")) {
 			// use 0000 0000 0000 0000 card to test decline
 			return (false);
 		}
 		
+		// check the exp date against todays date
+		Calendar calendar = Calendar.getInstance();
+	    int monthNow = calendar.get(Calendar.MONTH);
+	    monthNow++;  // increment to compensate for Jan == 0
+	    int yearNow = calendar.get(Calendar.YEAR); 
+		
+	    if (expYear < yearNow) {
+	    	return (false);
+	    } else if ((expYear == yearNow) && (expMonth < monthNow)) {
+	    	return (false);
+	    }
+	    	
 		return true;
 	}
 

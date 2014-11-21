@@ -3,7 +3,9 @@ package cs414.a5.rjh2h.exit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.HashMap;
 
+import cs414.a5.rjh2h.common.BillingAccount;
 import cs414.a5.rjh2h.common.Transaction;
 import cs414.a5.rjh2h.ui.RegisterUI;
 
@@ -12,6 +14,8 @@ public class Register implements ActionListener {
 	private RegisterUI registerUI;
 	private ExitKiosk exitKiosk;
 	private Transaction currentTransaction;
+	private HashMap<String, BillingAccount> BillingAccounts = new HashMap<String, BillingAccount>();
+	
 	
 	public Register() {
 		registerUI = new RegisterUI();
@@ -45,17 +49,22 @@ public class Register implements ActionListener {
 			registerUI.setCreditPayment();
 			paid = transaction.getPayment().initiatePayment();
 			
-			registerUI.resetUI();
-			this.exitKiosk.openGate();	
+			if (paid) {
+				registerUI.setCreditCardLabel("Card Accepted");
+				registerUI.setAmountDue(new BigDecimal(0));
+				registerUI.resetUI();
+				this.exitKiosk.openGate();	
+			} else {
+				registerUI.setCreditCardLabel("Card Declined");
+			}
 			
-			// set the cc field to the credit card
 			break;
 		case "AccountPayment":
 			registerUI.setAccountPayment();
 			paid = transaction.getPayment().initiatePayment();
 			
 			// marks a account as paid and opens gate
-			
+			registerUI.setAmountDue(new BigDecimal(0));
 			registerUI.resetUI();
 			this.exitKiosk.openGate();	
 			
@@ -77,18 +86,26 @@ public class Register implements ActionListener {
 		String eventName = event.getActionCommand();
 		
 		switch (eventName) {
-		case "OpenGate":
+		case "RetryPayment":
 			registerUI.resetUI();
-			this.exitKiosk.openGate();	
+			exitKiosk.retryPayment();
 			break;
 		case "CashField":
 			// get cash tendered and set changeDue amount
 			BigDecimal cashTendered = registerUI.getCashTendered();
 			BigDecimal change = cashTendered.subtract(currentTransaction.getAmount());
 			registerUI.setChangeLabel(change);
+			if (change.compareTo(BigDecimal.ZERO) > 0) {
+				// enable paid button
+				registerUI.setCashPaid(true);
+			} else {
+				registerUI.setCashPaid(false);
+			}
+			
 			break;
 		case "Paid":
 			// marks a cash deal as paid and opens gate
+			registerUI.setAmountDue(new BigDecimal(0));
 			registerUI.resetUI();
 			this.exitKiosk.openGate();	
 			break;

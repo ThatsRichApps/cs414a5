@@ -58,13 +58,7 @@ public class ExitKiosk implements ActionListener, Observer {
 		exitUI = new ExitKioskUI();
 		
 		// Add the ExitKiosk (this) as the Action Listener for UI Actions
-		exitUI.addTicketFieldActionListener(this);
-		exitUI.addLicenseFieldActionListener(this);
-		exitUI.addLostTicketButtonActionListener(this);
-		
-		exitUI.addPayCashButtonActionListener(this);
-		exitUI.addPayOnAccountButtonActionListener(this);
-		exitUI.addCreditCardFieldActionListener(this);
+		exitUI.addActionListeners(this);
 		
 		// create a gate and observe it's status
 		exitGate = new Gate();	
@@ -119,7 +113,15 @@ public class ExitKiosk implements ActionListener, Observer {
 			exitUI.enableFindTicketButtons(false);
 			exitUI.enablePaymentFields(false);
 			String creditCardNumber = exitUI.getCreditCardNumber();
-			currentTransaction.createCreditPayment(creditCardNumber);
+			int expMonth = exitUI.getExpMonth();
+			int expYear = exitUI.getExpYear();
+			currentTransaction.createCreditPayment(creditCardNumber, expMonth, expYear);
+			register.validatePayment(currentTransaction);
+			break;
+		case "CanNotPay":
+			exitUI.enableFindTicketButtons(false);
+			exitUI.enablePaymentFields(false);
+			currentTransaction.createAccountPayment();
 			register.validatePayment(currentTransaction);
 			break;
 		}
@@ -129,8 +131,6 @@ public class ExitKiosk implements ActionListener, Observer {
 	private void lookupTicket() {
 		
 		int ticketNumber = exitUI.getTicketNumber();
-		
-		System.out.println("looking up ticket number: " + ticketNumber);
 		
 		try {
 			currentTicket = garage.getTicketNumber(ticketNumber);
@@ -197,6 +197,10 @@ public class ExitKiosk implements ActionListener, Observer {
 
 		// now enable the payment buttons and disable find ticket buttons
 		exitUI.enableFindTicketButtons(false);
+		exitUI.enablePaymentFields(true);
+	}
+	
+	public void retryPayment() {
 		exitUI.enablePaymentFields(true);
 	}
 	

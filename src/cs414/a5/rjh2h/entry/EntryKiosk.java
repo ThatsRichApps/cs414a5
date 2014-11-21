@@ -205,7 +205,7 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 
 			if (ticketLevel < TICKET_LEVEL_WARNING) {
 				// warn someone that the physical ticket level is low
-				// maybe with a notification
+				// maybe with a notification to the garage
 			}
 
 			entryUI.setMessage1("Press Top Button to Enter");

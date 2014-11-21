@@ -87,8 +87,8 @@ public class Transaction implements Serializable {
 		payment = new CashPayment(amount);
 	}
 	
-	public void createCreditPayment(String creditCardNumber){
-		payment = new CreditPayment(amount, creditCardNumber);
+	public void createCreditPayment(String creditCardNumber, int expMonth, int expYear){
+		payment = new CreditPayment(amount, creditCardNumber, expMonth, expYear);
 	}
 	
 	public void createAccountPayment(){
