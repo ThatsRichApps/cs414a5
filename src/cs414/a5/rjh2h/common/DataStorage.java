@@ -96,6 +96,8 @@ public class DataStorage {
 	
 	public void updateOccupancyData (Date timestamp, int occupancy) {
 		
+		//System.out.println("Occupancy: " + timestamp + " : " + occupancy);
+		
 		occupancyData.put(timestamp,  occupancy);
 		
 	}

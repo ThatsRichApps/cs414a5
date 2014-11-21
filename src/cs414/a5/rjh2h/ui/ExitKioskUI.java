@@ -39,6 +39,8 @@ public class ExitKioskUI extends JFrame {
     private JButton canNotPayButton;
     
     private JFormattedTextField creditCardField;
+    private JFormattedTextField creditCardMMYYField;
+    
     
 	public ExitKioskUI() {
 	
@@ -109,10 +111,29 @@ public class ExitKioskUI extends JFrame {
         creditCardField.setActionCommand("PayCreditCard");
         creditCardField.setText("1111 1111 1111 11111");
         
+        // clear the 1111... field when clicked
         creditCardField.addFocusListener(new FocusListener(){
             @Override
             public void focusGained(FocusEvent e){
                 creditCardField.setText("");
+            }
+            
+			@Override
+			public void focusLost(FocusEvent e) {
+				// do nothing 
+			}
+        });
+        
+        creditCardMMYYField = new JFormattedTextField(createFormatter("##/####"));
+        creditCardMMYYField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+        creditCardMMYYField.setActionCommand("CreditCardMMYY");
+        creditCardMMYYField.setText("11/2014");
+        
+        // clear the field when clicked
+        creditCardMMYYField.addFocusListener(new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent e){
+                creditCardMMYYField.setText("");
             }
             
 			@Override
@@ -132,7 +153,7 @@ public class ExitKioskUI extends JFrame {
         
         gateStatusLabel = new JLabel("", SwingConstants.CENTER);
 		
-        JPanel pane = new JPanel(new GridLayout(12, 1));
+        JPanel pane = new JPanel(new GridLayout(13, 1));
         
         pane.add(topMessageLabel);
         pane.add(enterTicketField);
@@ -144,6 +165,8 @@ public class ExitKioskUI extends JFrame {
         
         pane.add(selectPaymentMessageLabel);
         pane.add(creditCardField);
+        pane.add(creditCardMMYYField);
+        
         pane.add(payOnAccountButton);
         pane.add(payCashButton);
         pane.add(canNotPayButton);
