@@ -13,7 +13,7 @@ public class DataStorage {
 	private Map<Integer, Transaction> transactionRecords = new HashMap<Integer, Transaction>();
 	private int transactionID = 0;
 	
-	private HashMap<String, SystemAccount> systemAccounts = new HashMap<String, SystemAccount>();
+	private Map<String, SystemAccount> systemAccounts = new HashMap<String, SystemAccount>();
 	
 	public DataStorage() {
 	}

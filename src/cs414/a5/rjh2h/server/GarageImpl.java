@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import cs414.a5.rjh2h.common.*;
@@ -28,10 +29,9 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
 	private int ticketID = 100;
+	private Login login;
 	
 	private ArrayList<RemoteObserver> observers = new ArrayList<RemoteObserver>();
-	
-	//private static GarageImpl garage;
 	
 	public GarageImpl() throws java.rmi.RemoteException {
 		super();
@@ -78,8 +78,8 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		return systemPreferences;
 	}
 
-	public void setSystemPreferences(SystemPreferences systemPreferences) {
-		this.systemPreferences = systemPreferences;
+	public void setSystemPreferences(Map<String, String> systemPrefs) {
+		this.systemPreferences = systemPrefs;
 	}
 	
 	public void updateOccupancy(String entryOrExit) {
@@ -142,6 +142,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 			usageReports = new UsageReports(dataStorage);
 			break;
 		case "Login":
+			login = new Login();
 			garageUI.setLogin(true);
 		}
 	}

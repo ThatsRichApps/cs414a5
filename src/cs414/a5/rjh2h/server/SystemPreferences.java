@@ -16,7 +16,6 @@ public class SystemPreferences implements ActionListener {
 	private SysAdminUI sysAdminUI;
 	
 	private Map<String, String> systemPrefs = new HashMap<String, String>();
-	private HashMap<String, SystemAccount> systemAccountList;
 	@SuppressWarnings("unused")
 	private GarageImpl garage;
 	
@@ -45,15 +44,6 @@ public class SystemPreferences implements ActionListener {
 	public void showAdminUI() {
 		sysAdminUI = new SysAdminUI(systemPrefs);
 		sysAdminUI.addActionListeners(this);
-	}
-	
-	public HashMap<String, SystemAccount> getSystemAccountList() {
-		return systemAccountList;
-	}
-
-	public void setSystemAccountList(
-		HashMap<String, SystemAccount> systemAccountList) {
-		this.systemAccountList = systemAccountList;
 	}
 
 	public BigDecimal getRate() {
@@ -106,8 +96,7 @@ public class SystemPreferences implements ActionListener {
 				
 				systemPrefs.put(preference, valueField);
 				
-				//setChanged();
-				//notifyObservers();
+				garage.setSystemPreferences(systemPrefs);
 				
 				break;
 		

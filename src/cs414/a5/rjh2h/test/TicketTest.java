@@ -14,6 +14,7 @@ import cs414.a5.rjh2h.common.Vehicle;
 
 public class TicketTest extends Ticket {
 	
+	private static final long serialVersionUID = 1L;
 	private Ticket testTicket1;
 	private Ticket testTicket2;
 	

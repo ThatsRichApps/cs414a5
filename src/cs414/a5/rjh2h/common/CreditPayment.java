@@ -25,6 +25,14 @@ public class CreditPayment extends Payment {
 		this.expMonth = expMonth;
 		this.expYear = expYear;
 	}
+	
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
 
 	public int getExpMonth() {
 		return expMonth;

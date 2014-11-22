@@ -50,6 +50,10 @@ public class ExitKiosk implements ActionListener, Observer {
 		
 	}
 	
+	public ExitKiosk() throws RemoteException {
+		super();
+	}	
+	
 	public ExitKiosk(Garage garage) throws RemoteException {
 		// set the garage as the observer to track car exit
 		this.garage = garage;

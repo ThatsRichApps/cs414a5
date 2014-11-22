@@ -6,11 +6,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AccountPaymentTest.class, ALPRTest.class,
-		BillingAccountTest.class, CashPaymentTest.class, CreditCardTest.class,
+		BillingAccountTest.class, CashPaymentTest.class, 
 		CreditPaymentTest.class, DataStorageTest.class, EntryKioskTest.class,
 		EntryKioskUITest.class, ExitKioskTest.class, ExitKioskUITest.class,
 		GarageUITest.class, GateTest.class, LoginUITest.class,
-		ParkingGarageTest.class, PhysicalTicketUITest.class,
 		RegisterTest.class, RegisterUITest.class, SignTest.class,
 		SignUITest.class, SysAdminUITest.class, SystemAccountTest.class,
 		SystemPreferencesTest.class, TicketTest.class, TransactionTest.class,

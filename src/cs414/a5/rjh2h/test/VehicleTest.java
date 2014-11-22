@@ -10,6 +10,7 @@ import cs414.a5.rjh2h.common.Vehicle;
 
 public class VehicleTest extends Vehicle {
 
+	private static final long serialVersionUID = 1L;
 	private Vehicle testVehicle1;
 	private Vehicle testVehicle2;
 	

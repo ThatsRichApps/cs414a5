@@ -8,11 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs414.a5.rjh2h.common.CreditCard;
 import cs414.a5.rjh2h.common.CreditPayment;
 
 public class CreditPaymentTest extends CreditPayment {
 
+	private static final long serialVersionUID = 1L;
 	private CreditPayment creditPaymentTest;
 	
 	@Before
@@ -32,9 +32,40 @@ public class CreditPaymentTest extends CreditPayment {
 
 	@Test
 	public void testCreditPayment2() {
-		CreditCard testCard = new CreditCard();
-		creditPaymentTest.setCreditCard(testCard);
-		assertEquals(testCard, creditPaymentTest.getCreditCard());
+		String testCard = "0000 0000 0000 0000";
+		int expMonth = 12;
+		int expYear = 2014;		
+		
+		creditPaymentTest.setCardNumber(testCard);
+		creditPaymentTest.setExpMonth(expMonth);
+		creditPaymentTest.setExpYear(expYear);
+		
+		assertEquals(false, creditPaymentTest.initiatePayment());
 	}
+
+	@Test
+	public void testCreditPayment3() {
+		int expMonth = 10;
+		int expYear = 2014;		
+		
+		creditPaymentTest.setExpMonth(expMonth);
+		creditPaymentTest.setExpYear(expYear);
+		
+		assertEquals(false, creditPaymentTest.initiatePayment());
+	}
+
+	@Test
+	public void testCreditPayment4() {
+		int expMonth = 12;
+		int expYear = 2014;		
+		
+		creditPaymentTest.setExpMonth(expMonth);
+		creditPaymentTest.setExpYear(expYear);
+		
+		assertEquals(true, creditPaymentTest.initiatePayment());
+	}
+
+	
+	
 	
 }

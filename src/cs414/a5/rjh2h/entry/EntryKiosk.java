@@ -63,6 +63,10 @@ public class EntryKiosk extends UnicastRemoteObject implements RemoteObserver, A
 		
 	}
 	
+	public EntryKiosk() throws RemoteException {
+	
+	}
+	
 	public EntryKiosk(Garage garage) throws RemoteException {
 		
 		this.garage = garage;

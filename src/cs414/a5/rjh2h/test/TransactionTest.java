@@ -10,6 +10,8 @@ import cs414.a5.rjh2h.common.Transaction;
 
 public class TransactionTest extends Transaction {
 
+	private static final long serialVersionUID = 1L;
+
 	@Before
 	public void setUp() throws Exception {
 	}

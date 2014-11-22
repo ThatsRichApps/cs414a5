@@ -7,10 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs414.a5.rjh2h.common.BillingAccount;
-import cs414.a5.rjh2h.common.CreditCard;
 
 public class BillingAccountTest extends BillingAccount {
 
+	private static final long serialVersionUID = 1L;
 	private BillingAccount billingAccountTest;
 	
 	@Before
@@ -50,17 +50,5 @@ public class BillingAccountTest extends BillingAccount {
 	public void testBillingAccount5() {
 		assertEquals("CO-BBB-222", billingAccountTest.getLicensePlate());
 	}
-
-	@Test
-	public void testBillingAccount6() {
-		CreditCard creditCard = new CreditCard(); 
-		billingAccountTest.setCreditCard(creditCard);
-		assertEquals(creditCard, billingAccountTest.getCreditCard());
-	}
-
-	
-	
-	
-	
 	
 }
