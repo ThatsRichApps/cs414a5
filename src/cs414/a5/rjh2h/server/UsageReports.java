@@ -2,9 +2,12 @@ package cs414.a5.rjh2h.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import cs414.a5.rjh2h.common.DataStorage;
 import cs414.a5.rjh2h.ui.UsageReportsUI;
@@ -12,6 +15,7 @@ import cs414.a5.rjh2h.ui.UsageReportsUI;
 public class UsageReports implements ActionListener {
 	
 	private UsageReportsUI usageReportsUI;
+	private DataStorage dataStorage;
 	
 	public UsageReports() {
 	}
@@ -19,46 +23,20 @@ public class UsageReports implements ActionListener {
 	public UsageReports(DataStorage dataStorage) {
 		usageReportsUI = new UsageReportsUI();
 		
-		// I only had time here in iteration one to create a basic report of
-		// total min and max occupancy : more types of usage summaries would
-		// be added modularly to this class
+		this.dataStorage = dataStorage;
 		
-		// go through the data and show some summaries
-		HashMap<Date, Integer> occupancyData = dataStorage.getOccupancyData();
+
+		usageReportsUI.setMainMessageLabel("Transactions:\n");
 		
-		int min = Integer.MAX_VALUE;
-	    int max = Integer.MIN_VALUE;
+		Calendar calendar = Calendar.getInstance();
+	    //calendar.add(Calendar.DAY_OF_YEAR, -10);   //Go to date, x days ago 
+	    calendar.add(Calendar.MONTH, -20);   //Go to date, x months ago 
+    	
+	    Date startDate = calendar.getTime(); 
+    	
+		showMonthlyData(startDate);
 		
-		for (Date timeStamp : occupancyData.keySet()) {
-			Integer occupancy = occupancyData.get(timeStamp);
-			
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(timeStamp);
-			
-			// eventually roll up stats by year, month, day
-			//int year = calendar.get(Calendar.YEAR);
-		    //int month = calendar.get(Calendar.MONTH);
-		    //int day = calendar.get(Calendar.DAY_OF_MONTH);
-		    //int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		
-		    if (occupancy < min) {
-		    	min = occupancy;
-		    }
-		    
-		    if (occupancy > max) {
-		    	max = occupancy;
-		    }
-		    
-		}
-		
-		if (min == Integer.MAX_VALUE) {
-			min = 0;
-		}
-		if (max == Integer.MIN_VALUE) {
-			max = 0;
-		}
-		
-		usageReportsUI.setMainMessageLabel("Min occupancy: " + min + " Max occupancy: " + max);
+		showTransactionStats();
 		
 	}
 	
@@ -70,5 +48,126 @@ public class UsageReports implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 	
 	}
+	
+	private void showTransactionStats() {
+		
+		usageReportsUI.appendTransactionStats("Transaction Type : Number Transactions : Total Amount\n");
+		
+	}
+	
+	private void showHourlyData (Date startDate) {
+		
+		Map<Date, Integer> occupancyData = dataStorage.getOccupancyData();
+		
+		StringBuilder sb = new StringBuilder();
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh a");
+		
+		sb.append("Date, Hour : Average Occupancy\n");
+		
+		Map<String, Integer> hourlySums = new TreeMap<String, Integer>();
+		Map<String, Integer> hourlyCount = new TreeMap<String, Integer>();
+		
+		for (Map.Entry<Date,Integer> entry : occupancyData.entrySet()) {
+		
+			Date key = entry.getKey();
+			Integer value = entry.getValue();
 
+			if (key.before(startDate)) { continue; };
+			
+			String newkey = df.format(key);
+
+			//System.out.println(newkey + " => " + value);
+		
+			if (hourlySums.get(newkey) == null) {
+				hourlySums.put(newkey, value);
+				hourlyCount.put(newkey, 1);
+			} else {
+				hourlySums.put(newkey, hourlySums.get(newkey) + value);
+				hourlyCount.put(newkey, hourlyCount.get(newkey) + 1);
+			}
+			
+		}
+
+		for (Map.Entry<String,Integer> entry : hourlySums.entrySet()) {
+		
+			String dateString = entry.getKey();
+			int sum = entry.getValue();
+			
+			int count = hourlyCount.get(dateString);
+			
+			int average = (int) Math.round((double)sum / count);
+			
+			sb.append(dateString + " : " + average + "\n");
+			
+		}
+		
+		String s = sb.toString();
+		usageReportsUI.appendOccupancyStats(s);
+		
+	}
+	
+	
+private void showMonthlyData (Date startDate) {
+		
+		Map<Date, Integer> occupancyData = dataStorage.getOccupancyData();
+		
+		StringBuilder sb = new StringBuilder();
+		DateFormat df = new SimpleDateFormat("yyyy- MM");
+		
+		sb.append("Month/Year : Average Occupancy\n");
+		
+		Map<String, Integer> monthlySums = new TreeMap<String, Integer>();
+		Map<String, Integer> monthlyCount = new TreeMap<String, Integer>();
+		
+		for (Map.Entry<Date,Integer> entry : occupancyData.entrySet()) {
+		
+			Date key = entry.getKey();
+			Integer value = entry.getValue();
+
+			if (key.before(startDate)) { continue; };
+			
+			String newkey = df.format(key);
+
+			//System.out.println(newkey + " => " + value);
+		
+			if (monthlySums.get(newkey) == null) {
+				monthlySums.put(newkey, value);
+				monthlyCount.put(newkey, 1);
+			} else {
+				monthlySums.put(newkey, monthlySums.get(newkey) + value);
+				monthlyCount.put(newkey, monthlyCount.get(newkey) + 1);
+			}
+			
+		}
+
+		for (Map.Entry<String,Integer> entry : monthlySums.entrySet()) {
+		
+			String dateString = entry.getKey();
+			int sum = entry.getValue();
+			
+			int count = monthlyCount.get(dateString);
+			
+			int average = (int) Math.round((double)sum / count);
+			
+			sb.append(dateString + " : " + average + "\n");
+			
+		}
+		
+		String s = sb.toString();
+		usageReportsUI.appendOccupancyStats(s);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

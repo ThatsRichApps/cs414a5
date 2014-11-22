@@ -15,9 +15,12 @@ public class GarageUI extends JFrame {
 
 	private static final long serialVersionUID = -632474825274688493L;
 	private JLabel messageLabel;
-    private JButton sysAdminButton;
+
+    private JButton loginButton;
+	private JButton sysAdminButton;
 	private JButton showUsageButton;
-    
+    private boolean loggedIn = false;
+	
 	public GarageUI (){		
 		initUI();
 	}
@@ -30,6 +33,17 @@ public class GarageUI extends JFrame {
 	public void setMessage(String message) {
 		messageLabel.setText(message);
 	}
+	
+	public void setLogin (boolean validated) {
+		
+		loggedIn = validated;
+		if (loggedIn) {
+			sysAdminButton.setEnabled(true);
+	        showUsageButton.setEnabled(true);
+	    }
+			
+	}
+	
 
 	private void initUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -37,14 +51,20 @@ public class GarageUI extends JFrame {
     	
         messageLabel = new JLabel("Current Occupancy: 0", SwingConstants.CENTER);
     
+        loginButton = new JButton("Login");
+        loginButton.setActionCommand("Login");
+        
         sysAdminButton = new JButton("System Administration");
         sysAdminButton.setActionCommand("SysAdmin");
+        sysAdminButton.setEnabled(false);
         
         showUsageButton = new JButton("Show Garage Usage"); 
         showUsageButton.setActionCommand("ShowUsage");
+        showUsageButton.setEnabled(false);
         
-        JPanel pane = new JPanel(new GridLayout(4, 1));
+        JPanel pane = new JPanel(new GridLayout(5, 1));
         
+        pane.add(loginButton);
         pane.add(sysAdminButton);
         pane.add(showUsageButton);
         pane.add(messageLabel);
@@ -66,17 +86,12 @@ public class GarageUI extends JFrame {
         setVisible(true);
     }
 	
-	public void addSysAdminActionListener (ActionListener listener) {
+	public void addActionListeners (ActionListener listener) {
 		
+		loginButton.addActionListener(listener);
 		sysAdminButton.addActionListener(listener);
-		
-	}
-	
-	public void addShowUsageActionListener (ActionListener listener) {
-		
 		showUsageButton.addActionListener(listener);
 		
 	}
-	
 	
 }

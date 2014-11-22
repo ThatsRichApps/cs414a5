@@ -2,22 +2,20 @@ package cs414.a5.rjh2h.common;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DataStorage {
 	
-	private HashMap<String, Ticket> virtualTickets = new HashMap<String, Ticket>();
-	private HashMap<Integer, Ticket> physicalTickets = new HashMap<Integer, Ticket>();
-	private HashMap<Date, Integer> occupancyData = new HashMap<Date, Integer>();
-	private HashMap<Integer, Transaction> transactionRecords = new HashMap<Integer, Transaction>();
+	private Map<String, Ticket> virtualTickets = new HashMap<String, Ticket>();
+	private Map<Integer, Ticket> physicalTickets = new HashMap<Integer, Ticket>();
+	private Map<Date, Integer> occupancyData = new TreeMap<Date, Integer>();
+	private Map<Integer, Transaction> transactionRecords = new HashMap<Integer, Transaction>();
 	private int transactionID = 0;
 	
 	private HashMap<String, SystemAccount> systemAccounts = new HashMap<String, SystemAccount>();
 	
 	public DataStorage() {
-		
-		// initialize any pre startup test data here
-		initializeData();
-	
 	}
 	
 	@Override
@@ -25,19 +23,19 @@ public class DataStorage {
 		return "DataStorage";
 	}
 	
-	public HashMap<Date, Integer> getOccupancyData() {
+	public Map<Date, Integer> getOccupancyData() {
 		return occupancyData;
 	}
 
-	public HashMap<String, Ticket> getVirtualTicketMap() {
+	public Map<String, Ticket> getVirtualTicketMap() {
 		return virtualTickets;
 	}
 
-	public HashMap<Integer, Ticket> getPhysicalTicketMap() {
+	public Map<Integer, Ticket> getPhysicalTicketMap() {
 		return physicalTickets;
 	}
 
-	public HashMap<String, SystemAccount> getSystemAccountList() {
+	public Map<String, SystemAccount> getSystemAccountList() {
 		return systemAccounts;
 	}
 
@@ -93,20 +91,11 @@ public class DataStorage {
 		transactionRecords.put(transactionID, transaction);
 	}
 	
-	
 	public void updateOccupancyData (Date timestamp, int occupancy) {
 		
 		//System.out.println("Occupancy: " + timestamp + " : " + occupancy);
 		
 		occupancyData.put(timestamp,  occupancy);
-		
-	}
-
-	private void initializeData() {
-		
-		// loop through a few hundred entries and exits
-		
-		//Date monthsBack = Date() - 100000;
 		
 	}
 	

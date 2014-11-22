@@ -41,8 +41,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		systemPreferences = new SystemPreferences(this);
 		dataStorage = new DataStorage();
 
-		garageUI.addSysAdminActionListener(this);
-		garageUI.addShowUsageActionListener(this);
+		garageUI.addActionListeners(this);
 		
 		this.setOpen(true);
 		
@@ -142,7 +141,8 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		case "ShowUsage":
 			usageReports = new UsageReports(dataStorage);
 			break;
-		
+		case "Login":
+			garageUI.setLogin(true);
 		}
 	}
 	
@@ -209,8 +209,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 
 	@Override
 	public void addTicket(Ticket currentTicket) throws RemoteException {
-		// merge these to one...
-		System.out.println("adding ticket to dataStorage");
+		//System.out.println("adding ticket to dataStorage");
 		dataStorage.addPhysicalTicket(currentTicket);
 		dataStorage.addVirtualTicket(currentTicket);
 	}
@@ -224,11 +223,10 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	private void simulateData() {
 		
 	    Calendar calendar = Calendar.getInstance();
-	    calendar.add(Calendar.MONTH, -12);   //Go to date, 12 months ago 
+	    calendar.add(Calendar.MONTH, -10);   //Go to date, x months ago 
     	Date simulatedTime = calendar.getTime(); 
     	
     	Date timeNow = new Date();
-    	
     	
 		// simulate 1000 entries and exits
 		int occupancy = 0;
