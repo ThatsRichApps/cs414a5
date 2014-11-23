@@ -27,5 +27,9 @@ public interface Garage extends Remote {
 	public BigDecimal getMaxFee() throws RemoteException;
 
 	public int getNextTicketID() throws RemoteException;
+
+	public BillingAccount getBillingAccount(String licensePlate) throws RemoteException;
+
+	public void addBillingAccount(BillingAccount newAccount) throws RemoteException;
 	
 }

@@ -7,12 +7,14 @@ public class AccountPayment extends Payment {
 	private static final long serialVersionUID = 1L;
 	// the car license plate is the billing account number or key
 	private String licensePlate;
+	private BillingAccount billingAccount;
 	
 	public AccountPayment() {
 	}
 	
-	public AccountPayment(BigDecimal amountDue) {
+	public AccountPayment(BigDecimal amountDue, BillingAccount billingAccount) {
 		super(amountDue);
+		this.billingAccount = billingAccount;
 	}
 	
 	@Override
@@ -22,11 +24,11 @@ public class AccountPayment extends Payment {
 
 	@Override
 	public boolean initiatePayment() {
-		// account payment needs visibility into BillingAccounts from server
-		
-		
-		
+		if (billingAccount == null) {
+			return false;
+		}
 		// track the account by license plate
+		// if the account exists, then we can bill them
 		return (true);
 	}
 

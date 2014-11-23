@@ -6,9 +6,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.exit.Register;
 
 public class RegisterTest extends Register {
+
+	public RegisterTest(Garage garage) {
+		super(garage);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Before
 	public void setUp() throws Exception {

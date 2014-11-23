@@ -19,8 +19,7 @@ public class GarageUI extends JFrame {
     private JButton loginButton;
 	private JButton sysAdminButton;
 	private JButton showUsageButton;
-    private boolean loggedIn = false;
-	
+    
 	public GarageUI (){		
 		initUI();
 	}
@@ -34,17 +33,6 @@ public class GarageUI extends JFrame {
 		messageLabel.setText(message);
 	}
 	
-	public void setLogin (boolean validated) {
-		
-		loggedIn = validated;
-		if (loggedIn) {
-			sysAdminButton.setEnabled(true);
-	        showUsageButton.setEnabled(true);
-	    }
-			
-	}
-	
-
 	private void initUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     	setTitle("Parking Garage");
@@ -85,6 +73,14 @@ public class GarageUI extends JFrame {
         //setLocationRelativeTo(null);
         setVisible(true);
     }
+	
+	public void enableButtons(boolean enabled) {
+		
+		sysAdminButton.setEnabled(enabled);
+		showUsageButton.setEnabled(enabled);
+		
+	}
+	
 	
 	public void addActionListeners (ActionListener listener) {
 		

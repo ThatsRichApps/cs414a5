@@ -14,8 +14,14 @@ public class DataStorage {
 	private int transactionID = 0;
 	
 	private Map<String, SystemAccount> systemAccounts = new HashMap<String, SystemAccount>();
+	private Map<String, BillingAccount> billingAccounts = new HashMap<String, BillingAccount>();
 	
 	public DataStorage() {
+		
+		// initialize a few system accounts
+		
+		systemAccounts.put("rich", new SystemAccount("rich", "pass1", "admin"));	
+		
 	}
 	
 	@Override
@@ -70,6 +76,27 @@ public class DataStorage {
 		return systemAccounts.get(username);
 	}
 	
+	public boolean validateSystemAccount (String username, String password) {
+		
+		if ((username == null) || (password == null)) {
+			return false;
+		}
+		
+		SystemAccount sysAccount = systemAccounts.get(username);
+		
+		if (sysAccount == null) return false;
+		
+		
+		if (sysAccount.getPassword().equals(password)) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	
+	
 	public Ticket getTicketByNumber (int ticketNumber) {
 		// lookup the ticket by number 
 		Ticket ticket = physicalTickets.get(ticketNumber);
@@ -96,6 +123,27 @@ public class DataStorage {
 		//System.out.println("Occupancy: " + timestamp + " : " + occupancy);
 		
 		occupancyData.put(timestamp,  occupancy);
+		
+	}
+
+	public BillingAccount getBillingAccount(String licensePlate) {
+		
+		BillingAccount billing;
+		
+		try {
+			billing = billingAccounts.get(licensePlate);
+		} catch (NullPointerException np) {
+			billing = null;
+		}
+			
+		return billing;
+	
+	}
+	
+	public void addBillingAccount (BillingAccount newAccount) {
+		
+		String licensePlate = newAccount.getLicensePlate();
+		billingAccounts.put(licensePlate, newAccount);
 		
 	}
 	

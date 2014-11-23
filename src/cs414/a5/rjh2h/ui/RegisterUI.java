@@ -29,10 +29,13 @@ public class RegisterUI extends JFrame {
 	private JLabel paidOnAccountLabel;
 	private JLabel accountResponseLabel;
 	private JButton paidButton;
-	private JLabel driverNameLabel;
-	private JFormattedTextField driverNameField;
+	private JLabel driverFirstNameLabel;
+	private JFormattedTextField driverFirstNameField;
+	private JLabel driverLastNameLabel;
+	private JFormattedTextField driverLastNameField;
 	private JLabel licensePlateLabel;
 	private JFormattedTextField licensePlateField;
+	private JButton createAccountButton;
 	private JButton retryPaymentButton;
 	
     public RegisterUI () {
@@ -69,18 +72,24 @@ public class RegisterUI extends JFrame {
         paidOnAccountLabel = new JLabel("Paid On Account:", SwingConstants.CENTER);
         accountResponseLabel = new JLabel("", SwingConstants.CENTER);
         
-        driverNameLabel = new JLabel ("Driver Name:", SwingConstants.CENTER);
-    	driverNameField = new JFormattedTextField();
+        driverFirstNameLabel = new JLabel ("Driver First Name:", SwingConstants.CENTER);
+    	driverFirstNameField = new JFormattedTextField();
+    	driverLastNameLabel = new JLabel ("Driver Last Name:", SwingConstants.CENTER);
+    	driverLastNameField = new JFormattedTextField();
+    	
     	licensePlateLabel = new JLabel("License Plate:", SwingConstants.CENTER);
     	licensePlateField = new JFormattedTextField();
     	
         paidButton = new JButton("Paid");
         paidButton.setActionCommand("Paid");
         
+        createAccountButton = new JButton("Create Billing Account");
+        createAccountButton.setActionCommand("CreateAccount");
+        
         retryPaymentButton = new JButton("Different Payment Method");
         retryPaymentButton.setActionCommand("RetryPayment");
         
-        JPanel pane = new JPanel(new GridLayout(8, 2));
+        JPanel pane = new JPanel(new GridLayout(10, 2));
         
         pane.add(amountDueLabel);
         pane.add(amountLabel);
@@ -97,12 +106,15 @@ public class RegisterUI extends JFrame {
         pane.add(paidOnAccountLabel);
         pane.add(accountResponseLabel);
         
-        pane.add(driverNameLabel);
-        pane.add(driverNameField);
+        pane.add(driverFirstNameLabel);
+        pane.add(driverFirstNameField);
+        pane.add(driverLastNameLabel);
+        pane.add(driverLastNameField);
         pane.add(licensePlateLabel);
         pane.add(licensePlateField);
     	
         pane.add(paidButton);
+        pane.add(createAccountButton);
         pane.add(retryPaymentButton);
         
         pane.setBorder(BorderFactory.createEmptyBorder(
@@ -136,6 +148,7 @@ public class RegisterUI extends JFrame {
     	// set the controller class (Register) as the action listener
         enterCashTenderedField.addActionListener(listener);
         paidButton.addActionListener(listener);
+        createAccountButton.addActionListener(listener);
         retryPaymentButton.addActionListener(listener);	
     }
     
@@ -164,13 +177,25 @@ public class RegisterUI extends JFrame {
     public void setAccountPayment() {
         paidOnAccountLabel.setEnabled(true);
         accountResponseLabel.setEnabled(true);
+        driverFirstNameLabel.setEnabled(true);
+        driverFirstNameField.setEnabled(true);
+        driverLastNameLabel.setEnabled(true);
+        driverLastNameField.setEnabled(true);
+        licensePlateLabel.setEnabled(true);
+        licensePlateField.setEnabled(true);
+        createAccountButton.setEnabled(true);
+        retryPaymentButton.setEnabled(true);
     }
     
     public void resetUI() {
 		//setAmountDue(new BigDecimal(0));
+    	// clear all fields and disable buttons
 		enterCashTenderedField.setText("");
 		changeLabel.setText("");
 	    creditCardResponseLabel.setText("");
+	    driverFirstNameField.setText("");
+	    driverLastNameField.setText("");
+	    licensePlateField.setText("");
 	    setAllPaymentsEnabled(false);
     }
     
@@ -179,24 +204,21 @@ public class RegisterUI extends JFrame {
     	// usually only used for enabled = false
         cashTenderedLabel.setEnabled(enabled);
         enterCashTenderedField.setEnabled(enabled);
-        
 	    changeDueLabel.setEnabled(enabled);
         changeLabel.setEnabled(enabled);
-        
         paidByCCLabel.setEnabled(enabled);
         creditCardResponseLabel.setEnabled(enabled);
-
         paidOnAccountLabel.setEnabled(enabled);
         accountResponseLabel.setEnabled(enabled);
-        
         paidButton.setEnabled(enabled);
-        
-        driverNameLabel.setEnabled(enabled);
+        driverFirstNameLabel.setEnabled(enabled);
+        driverLastNameLabel.setEnabled(enabled);
         licensePlateLabel.setEnabled(enabled);
-        driverNameField.setEnabled(enabled);
+        driverFirstNameField.setEnabled(enabled);
+        driverLastNameField.setEnabled(enabled);
         licensePlateField.setEnabled(enabled);
+        createAccountButton.setEnabled(enabled);
         retryPaymentButton.setEnabled(enabled);
-    	
     }
     
     public BigDecimal getCashTendered() {
@@ -207,6 +229,22 @@ public class RegisterUI extends JFrame {
     		cashTendered = new BigDecimal("0");
     	}
     	return (cashTendered);
+    }
+
+	public String getFirstName() {
+		return driverFirstNameField.getText();
+	}
+
+	public String getLastName() {
+		return driverLastNameField.getText();
+	}
+
+	public String getLicensePlate() {
+		return licensePlateField.getText();
+	}
+    
+    public void setLicensePlateField (String licensePlate) {
+    	licensePlateField.setText(licensePlate);
     }
     
     public void setAmountDue(BigDecimal amount) {
@@ -224,5 +262,6 @@ public class RegisterUI extends JFrame {
 	public void setAccountNumberLabel(String accountNumberLabel) {
 		this.accountResponseLabel.setText(accountNumberLabel);
 	}
+
     
 }

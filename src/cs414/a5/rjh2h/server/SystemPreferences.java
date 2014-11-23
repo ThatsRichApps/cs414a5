@@ -5,10 +5,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-//import java.util.Observable;
 
-
-import cs414.a5.rjh2h.common.SystemAccount;
 import cs414.a5.rjh2h.ui.SysAdminUI;
 
 public class SystemPreferences implements ActionListener {
@@ -24,12 +21,10 @@ public class SystemPreferences implements ActionListener {
 	
 	public SystemPreferences(GarageImpl garage) {
 		
-		// set the garage as an observer so that
-		// when preferences change (max occupancy)
-		// the garage updates accordingly
 		this.garage = garage;
-		//this.addObserver(garage);
-				
+		
+		//systemPrefs = (Map<String, String>) garage.getSystemPreferences();
+		
 		systemPrefs.put("rate", "2.00");
 		systemPrefs.put("maximum occupancy", "5");
 		systemPrefs.put("max fee", "48.00");
@@ -75,7 +70,7 @@ public class SystemPreferences implements ActionListener {
 		
 		String eventName = event.getActionCommand();
 		
-		System.out.println("event:" + eventName);
+		//System.out.println("event:" + eventName);
 		
 		switch (eventName) {
 			
@@ -95,9 +90,6 @@ public class SystemPreferences implements ActionListener {
 				String valueField = sysAdminUI.getPreferenceField(); 
 				
 				systemPrefs.put(preference, valueField);
-				
-				garage.setSystemPreferences(systemPrefs);
-				
 				break;
 		
 		}

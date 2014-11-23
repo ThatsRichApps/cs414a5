@@ -91,9 +91,8 @@ public class Transaction implements Serializable {
 		payment = new CreditPayment(amount, creditCardNumber, expMonth, expYear);
 	}
 	
-	public void createAccountPayment(){
-		payment = new AccountPayment(amount);
+	public void createAccountPayment(BillingAccount billingAccount){
+		payment = new AccountPayment(amount, billingAccount);
 	}
-	
 	
 }

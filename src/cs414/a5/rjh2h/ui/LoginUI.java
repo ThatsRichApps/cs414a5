@@ -2,6 +2,7 @@ package cs414.a5.rjh2h.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -47,7 +48,7 @@ public class LoginUI extends JFrame {
     	setTitle("Login");
     	
         loginButton = new JButton("Login");
-        loginButton.setActionCommand("Login");
+        loginButton.setActionCommand("Authenticate");
         
         cancelButton = new JButton("Cancel");
         cancelButton.setActionCommand("Cancel");
@@ -85,10 +86,36 @@ public class LoginUI extends JFrame {
         setVisible(true);
     }
 	
+	public void addActionListeners (ActionListener listener) {
+		
+		loginButton.addActionListener(listener);
+		cancelButton.addActionListener(listener);
+	}
+	
+	
+	
 	
 	@Override
 	public String toString() {
 		return "LoginUI";
+	}
+
+	public String getUsername() {
+		return username.getText();
+	}
+
+	public String getPassword() {
+		
+		char[] passwordArray;
+		try {
+			passwordArray = password.getPassword();
+		} catch (NullPointerException np) {
+			passwordArray = new char[0];
+		}
+			
+		String password = String.valueOf(passwordArray); 
+		
+		return (password);
 	}
 	
 }

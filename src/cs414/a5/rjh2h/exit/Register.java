@@ -2,22 +2,29 @@ package cs414.a5.rjh2h.exit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.rmi.RemoteException;
 
 import cs414.a5.rjh2h.common.BillingAccount;
+import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.common.Transaction;
 import cs414.a5.rjh2h.ui.RegisterUI;
 
-public class Register implements ActionListener {
+public class Register implements ActionListener, Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private RegisterUI registerUI;
 	private ExitKiosk exitKiosk;
 	private Transaction currentTransaction;
-	private HashMap<String, BillingAccount> BillingAccounts = new HashMap<String, BillingAccount>();
-	
+	private Garage garage;
 	
 	public Register() {
+		super();
+	}
+	
+	public Register(Garage garage) {
+		this.garage = garage;
 		registerUI = new RegisterUI();
 		registerUI.addAllActionListeners(this);
 	}
@@ -63,10 +70,15 @@ public class Register implements ActionListener {
 			registerUI.setAccountPayment();
 			paid = transaction.getPayment().initiatePayment();
 			
-			// marks a account as paid and opens gate
-			registerUI.setAmountDue(new BigDecimal(0));
-			registerUI.resetUI();
-			this.exitKiosk.openGate();	
+			if (paid) {
+				// marks a account as paid and opens gate
+				registerUI.setAccountNumberLabel("Paid on Account");
+				registerUI.setAmountDue(new BigDecimal(0));
+				registerUI.resetUI();
+				this.exitKiosk.openGate();	
+			} else {
+				registerUI.setAccountNumberLabel("Account Not Found");
+			}
 			
 			// set the account paid field to license
 			break;
@@ -95,7 +107,7 @@ public class Register implements ActionListener {
 			BigDecimal cashTendered = registerUI.getCashTendered();
 			BigDecimal change = cashTendered.subtract(currentTransaction.getAmount());
 			registerUI.setChangeLabel(change);
-			if (change.compareTo(BigDecimal.ZERO) > 0) {
+			if (change.compareTo(BigDecimal.ZERO) >= 0) {
 				// enable paid button
 				registerUI.setCashPaid(true);
 			} else {
@@ -109,6 +121,39 @@ public class Register implements ActionListener {
 			registerUI.resetUI();
 			this.exitKiosk.openGate();	
 			break;
+		case "CreateAccount":
+			// validate input from fields 
+			boolean valid = true;
+			// create account if valid, otherwise return
+			String firstName = registerUI.getFirstName();
+			String lastName = registerUI.getLastName();
+			String licensePlate = registerUI.getLicensePlate();
+			BillingAccount newAccount = new BillingAccount(licensePlate);
+			newAccount.setFirstName(firstName);
+			newAccount.setLastName(lastName);
+			
+			System.out.println("Create Account:" + firstName + lastName + licensePlate + valid);
+			
+			try {
+				garage.addBillingAccount(newAccount);
+			} catch (RemoteException e) {
+				System.out.println("Trouble: " + e);
+				valid = false;
+			}
+			
+			System.out.println("why is valid = " + valid);
+			
+			if (valid) {
+				registerUI.setAmountDue(new BigDecimal(0));
+				registerUI.resetUI();
+				this.exitKiosk.openGate();	
+			} else {
+				
+				System.out.println("invalid account info");
+				
+			}
+			break;
+			
 		}
 		
 	}

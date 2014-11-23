@@ -112,7 +112,7 @@ private void showMonthlyData (Date startDate) {
 		Map<Date, Integer> occupancyData = dataStorage.getOccupancyData();
 		
 		StringBuilder sb = new StringBuilder();
-		DateFormat df = new SimpleDateFormat("yyyy- MM");
+		DateFormat df = new SimpleDateFormat("yyyy MM - MMMMM");
 		
 		sb.append("Month/Year : Average Occupancy\n");
 		

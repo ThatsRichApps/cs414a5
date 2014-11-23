@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs414.a5.rjh2h.common.AccountPayment;
+import cs414.a5.rjh2h.common.BillingAccount;
 
 public class AccountPaymentTest extends AccountPayment {
 
@@ -18,7 +19,8 @@ public class AccountPaymentTest extends AccountPayment {
 	@Before
 	public void setUp() throws Exception {
 		BigDecimal amount = new BigDecimal("100.00");
-		accountPaymentTest = new AccountPayment(amount);
+		BillingAccount account = new BillingAccount();
+		accountPaymentTest = new AccountPayment(amount, account);
 	}
 
 	@After

@@ -2,6 +2,7 @@ package cs414.a5.rjh2h.exit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -9,14 +10,16 @@ import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.Observer;
 
+import cs414.a5.rjh2h.common.BillingAccount;
 import cs414.a5.rjh2h.common.Garage;
 import cs414.a5.rjh2h.common.Gate;
 import cs414.a5.rjh2h.common.Ticket;
 import cs414.a5.rjh2h.common.Transaction;
 import cs414.a5.rjh2h.ui.ExitKioskUI;
 
-public class ExitKiosk implements ActionListener, Observer {
+public class ExitKiosk implements ActionListener, Observer, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ExitKioskUI exitUI;
 	private Garage garage;
 	private Register register;
@@ -70,7 +73,7 @@ public class ExitKiosk implements ActionListener, Observer {
 		exitGate.closeGate();
 		
 		// create a cash register for taking payments
-		register = new Register();
+		register = new Register(garage);
 	
 		// pass the exitGate so that the cashier can open it too
 		register.setExitKiosk(this);
@@ -110,7 +113,19 @@ public class ExitKiosk implements ActionListener, Observer {
 		case "PayOnAccount":
 			exitUI.enableFindTicketButtons(false);
 			exitUI.enablePaymentFields(false);
-			currentTransaction.createAccountPayment();
+			
+			// get the license plate of the currenet vehicle
+			String licensePlate = currentTicket.getVehicle().getLicensePlate();
+			
+			// lookup billing account by licensePlate
+			BillingAccount billingAccount;
+			try {
+				billingAccount = garage.getBillingAccount(licensePlate);
+			} catch (RemoteException e) {
+				billingAccount = null;
+			}
+			
+			currentTransaction.createAccountPayment(billingAccount);
 			register.validatePayment(currentTransaction);
 			break;
 		case "PayCreditCard":
@@ -125,7 +140,7 @@ public class ExitKiosk implements ActionListener, Observer {
 		case "CanNotPay":
 			exitUI.enableFindTicketButtons(false);
 			exitUI.enablePaymentFields(false);
-			currentTransaction.createAccountPayment();
+			currentTransaction.createAccountPayment(null);
 			register.validatePayment(currentTransaction);
 			break;
 		}

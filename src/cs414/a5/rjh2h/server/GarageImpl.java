@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import cs414.a5.rjh2h.common.*;
@@ -29,7 +28,8 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
 	private int ticketID = 100;
-	private Login login;
+	private LoginUI loginUI;
+	private boolean loggedIn;
 	
 	private ArrayList<RemoteObserver> observers = new ArrayList<RemoteObserver>();
 	
@@ -78,10 +78,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		return systemPreferences;
 	}
 
-	public void setSystemPreferences(Map<String, String> systemPrefs) {
-		this.systemPreferences = systemPrefs;
-	}
-	
 	public void updateOccupancy(String entryOrExit) {
 		// successful entry or exit, update occupancy and observers
 		
@@ -97,6 +93,8 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		
 		garageUI.setMessage("Current Occupancy: " + currentOccupancy);
 		garageUI.setVisible(true);
+		// disable buttons until login is verified
+		garageUI.enableButtons(false);
 
 		Date timeNow = new Date();
 		dataStorage.updateOccupancyData(timeNow, currentOccupancy);
@@ -128,6 +126,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	public void actionPerformed(ActionEvent event) {
 		
 		// this is the action listener for the buttons on the garageUI
+		// loginUI is a dialog for verifying admins
 		// launches an adminUI for changing preferences and a usageReportsUI for 
 		// viewing using data
 		
@@ -142,9 +141,30 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 			usageReports = new UsageReports(dataStorage);
 			break;
 		case "Login":
-			login = new Login();
-			garageUI.setLogin(true);
+			loginUI = new LoginUI();
+			loginUI.addActionListeners(this);
+			break;
+		case "Authenticate":
+			loggedIn = authenticate(loginUI.getUsername(), loginUI.getPassword());
+			
+			if (loggedIn) {
+				garageUI.enableButtons(true);
+			}
+			break;
+		case "Cancel":
+			// close the login window
+			loginUI.dispose();
+			break;
+			
 		}
+	
+	}
+	
+	private boolean authenticate (String username, String password) {
+
+		//System.out.println("check for user: " + username + " pass: " + password);
+		return (dataStorage.validateSystemAccount(username, password));
+		
 	}
 	
 	public void addVirtualTicket(Ticket ticket) {
@@ -279,6 +299,18 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		}
 		
 		
+	}
+
+	@Override
+	public BillingAccount getBillingAccount(String licensePlate) throws RemoteException {
+		
+		return dataStorage.getBillingAccount(licensePlate);
+
+	}
+
+	@Override
+	public void addBillingAccount(BillingAccount newAccount) throws RemoteException {
+		dataStorage.addBillingAccount(newAccount);
 	}
 
 	

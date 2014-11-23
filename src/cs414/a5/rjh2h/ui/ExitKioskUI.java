@@ -157,7 +157,7 @@ public class ExitKioskUI extends JFrame {
         payOnAccountButton = new JButton("Pay on Account");
         payOnAccountButton.setActionCommand("PayOnAccount");
     
-        canNotPayButton = new JButton("I Can Not Pay");
+        canNotPayButton = new JButton("Can Not Pay (Create Acount)");
         canNotPayButton.setActionCommand("CanNotPay");
         
         gateStatusLabel = new JLabel("", SwingConstants.CENTER);
