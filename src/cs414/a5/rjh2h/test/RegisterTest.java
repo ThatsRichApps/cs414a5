@@ -11,6 +11,8 @@ import cs414.a5.rjh2h.exit.Register;
 
 public class RegisterTest extends Register {
 
+	private static final long serialVersionUID = 1L;
+
 	public RegisterTest(Garage garage) {
 		super(garage);
 		// TODO Auto-generated constructor stub

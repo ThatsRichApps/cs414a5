@@ -19,14 +19,26 @@ public class DataStorage {
 	public DataStorage() {
 		
 		// initialize a few system accounts
-		
-		systemAccounts.put("rich", new SystemAccount("rich", "pass1", "admin"));	
+		systemAccounts.put("rich", new SystemAccount("rich", "rich", "admin"));	
+		systemAccounts.put("test", new SystemAccount("test", "test", "admin"));	
+		systemAccounts.put("test1", new SystemAccount("test1", "test1", "admin"));	
+		systemAccounts.put("test2", new SystemAccount("test2", "test2", "admin"));	
+		systemAccounts.put("test3", new SystemAccount("test3", "test3", "admin"));	
+		systemAccounts.put("test4", new SystemAccount("test4", "test4", "admin"));	
+		systemAccounts.put("cashier", new SystemAccount("cashier", "cashier", "cashier"));	
+
+		// initialize some billing accounts
+		billingAccounts.put("CO-AAA-111", new BillingAccount("CO-AAA-111"));
 		
 	}
 	
 	@Override
 	public String toString() {
 		return "DataStorage";
+	}
+	
+	public Map<Integer, Transaction> getTransactionData() {
+		return transactionRecords;
 	}
 	
 	public Map<Date, Integer> getOccupancyData() {
@@ -121,7 +133,6 @@ public class DataStorage {
 	public void updateOccupancyData (Date timestamp, int occupancy) {
 		
 		//System.out.println("Occupancy: " + timestamp + " : " + occupancy);
-		
 		occupancyData.put(timestamp,  occupancy);
 		
 	}

@@ -28,10 +28,6 @@ public class GarageUI extends JFrame {
 	public String toString() {
 		return "GarageUI";
 	}
-
-	public void setMessage(String message) {
-		messageLabel.setText(message);
-	}
 	
 	private void initUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -73,6 +69,10 @@ public class GarageUI extends JFrame {
         //setLocationRelativeTo(null);
         setVisible(true);
     }
+
+	public void setMessage(String message) {
+		messageLabel.setText(message);
+	}
 	
 	public void enableButtons(boolean enabled) {
 		
@@ -81,7 +81,11 @@ public class GarageUI extends JFrame {
 		
 	}
 	
-	
+	public void setLoginButton (String text) {
+		loginButton.setText(text); 
+        loginButton.setActionCommand(text);
+    }	
+
 	public void addActionListeners (ActionListener listener) {
 		
 		loginButton.addActionListener(listener);

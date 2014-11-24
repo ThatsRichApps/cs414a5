@@ -24,7 +24,6 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 	private int currentOccupancy;
 	private GarageUI garageUI;
 	private SystemPreferences systemPreferences;
-	@SuppressWarnings("unused")
 	private UsageReports usageReports;
 	private DataStorage dataStorage;
 	private int ticketID = 100;
@@ -93,9 +92,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		
 		garageUI.setMessage("Current Occupancy: " + currentOccupancy);
 		garageUI.setVisible(true);
-		// disable buttons until login is verified
-		garageUI.enableButtons(false);
-
+		
 		Date timeNow = new Date();
 		dataStorage.updateOccupancyData(timeNow, currentOccupancy);
 				
@@ -138,10 +135,14 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 			systemPreferences.showAdminUI();
 			break;
 		case "ShowUsage":
-			usageReports = new UsageReports(dataStorage);
+			if (usageReports == null) {
+				usageReports = new UsageReports(dataStorage);
+			}
 			break;
 		case "Login":
-			loginUI = new LoginUI();
+			if (loginUI == null) {
+				loginUI = new LoginUI();
+			}
 			loginUI.addActionListeners(this);
 			break;
 		case "Authenticate":
@@ -149,7 +150,17 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 			
 			if (loggedIn) {
 				garageUI.enableButtons(true);
+				loginUI.dispose();
+				garageUI.setLoginButton("Log Out");
+			} else {
+				loginUI.setFeedbackLabel("Invalid Login");
 			}
+			
+			break;
+		case "Log Out":
+			loggedIn = false;
+			garageUI.enableButtons(false);
+			garageUI.setLoginButton("Login");
 			break;
 		case "Cancel":
 			// close the login window
@@ -254,7 +265,7 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 		int maxOccupancy = 300;
 		
 		int randomEntryPercent = 80;
-		// 80% will be entries at first, then switch to 80% exits when capacity is 250
+		// 80% will be entries at first, then switch to 40% exits when capacity is 250
 		
 		// track occupancy so that cars can exit if there are none
 		for (int i = 0; i < 100000; i++) {
@@ -295,9 +306,22 @@ public class GarageImpl extends UnicastRemoteObject implements Garage, RemoteSub
 				
 				// stop when we get to now
 				if (simulatedTime.after(timeNow)) break;
-		    	
+				
 		}
 		
+		// add a car that has billing accounts to the garage
+		BigDecimal currentRate = new BigDecimal("3.00");
+		Ticket testTicket = new Ticket(99, currentRate);
+		
+		testTicket.getVehicle().setLicensePlate("CO-AAA-111");
+		
+		updateOccupancy("entry");
+		
+		try {
+			addTicket(testTicket);
+		} catch (RemoteException e) {
+			// just a test, no need to panic
+		}
 		
 	}
 

@@ -128,11 +128,17 @@ public class Register implements ActionListener, Serializable {
 			String firstName = registerUI.getFirstName();
 			String lastName = registerUI.getLastName();
 			String licensePlate = registerUI.getLicensePlate();
+			
+			if ((firstName.equals(""))||(lastName.equals(""))||(licensePlate.equals(""))) {
+				registerUI.setAccountNumberLabel("Invalid Account Information");
+				break;
+			}
+			
 			BillingAccount newAccount = new BillingAccount(licensePlate);
 			newAccount.setFirstName(firstName);
 			newAccount.setLastName(lastName);
 			
-			System.out.println("Create Account:" + firstName + lastName + licensePlate + valid);
+			//System.out.println("Create Account:" + firstName + lastName + licensePlate + valid);
 			
 			try {
 				garage.addBillingAccount(newAccount);
@@ -141,7 +147,6 @@ public class Register implements ActionListener, Serializable {
 				valid = false;
 			}
 			
-			System.out.println("why is valid = " + valid);
 			
 			if (valid) {
 				registerUI.setAmountDue(new BigDecimal(0));
@@ -149,7 +154,7 @@ public class Register implements ActionListener, Serializable {
 				this.exitKiosk.openGate();	
 			} else {
 				
-				System.out.println("invalid account info");
+				registerUI.setAccountNumberLabel("Invalid Account Information");
 				
 			}
 			break;

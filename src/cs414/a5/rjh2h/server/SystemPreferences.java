@@ -37,8 +37,10 @@ public class SystemPreferences implements ActionListener {
 	}
 
 	public void showAdminUI() {
-		sysAdminUI = new SysAdminUI(systemPrefs);
-		sysAdminUI.addActionListeners(this);
+		if (sysAdminUI == null) {
+			sysAdminUI = new SysAdminUI(systemPrefs);
+			sysAdminUI.addActionListeners(this);
+		}
 	}
 
 	public BigDecimal getRate() {

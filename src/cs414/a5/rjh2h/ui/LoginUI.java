@@ -28,23 +28,15 @@ public class LoginUI extends JFrame {
     private JLabel passwordLabel;
     private JButton loginButton;
     private JButton cancelButton;
-    private boolean succeeded;
- 
-	public boolean isSucceeded() {
-		return succeeded;
-	}
-
-	public void setSucceeded(boolean succeeded) {
-		this.succeeded = succeeded;
-	}
-
-	public LoginUI() {
+    private JLabel feedbackLabel;
+   
+ 	public LoginUI() {
 		super();
 		initUI();
 	}
 
 	private void initUI() {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     	setTitle("Login");
     	
         loginButton = new JButton("Login");
@@ -59,7 +51,7 @@ public class LoginUI extends JFrame {
         usernameLabel = new JLabel("Username:", SwingConstants.CENTER);
         passwordLabel = new JLabel("Password:", SwingConstants.CENTER);
 
-        succeeded = false;
+        feedbackLabel = new JLabel ("", SwingConstants.CENTER);
         
         JPanel pane = new JPanel(new GridLayout(5, 1));
 
@@ -69,6 +61,7 @@ public class LoginUI extends JFrame {
         pane.add(password);
         pane.add(cancelButton);
         pane.add(loginButton);
+        pane.add(feedbackLabel);
         
         pane.setBorder(BorderFactory.createEmptyBorder(
                 30, //top
@@ -117,5 +110,12 @@ public class LoginUI extends JFrame {
 		
 		return (password);
 	}
+	
+	public void setFeedbackLabel (String text) {
+		feedbackLabel.setText(text);
+	}
+	
+	
+	
 	
 }

@@ -13,6 +13,8 @@ import cs414.a5.rjh2h.server.GarageImpl;
 
 public class ExitKioskTest extends ExitKiosk {
 
+	private static final long serialVersionUID = 1L;
+
 	public ExitKioskTest() throws RemoteException {
 		super();
 	}
